@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-02-24",
+  "generated_at": "2026-02-25",
   "source_of_truth": {
     "source_champion_corpus": "From Online/champions/*.json",
     "canonical_characters_folder": "Characters/*.json",
@@ -2440,6 +2440,131 @@
         "focus": "Tumble two-phase execution (dash at cast, bonus damage on next basic attack hit) with attack-reset timing semantics",
         "page_level_sources": [
           "https://wiki.leagueoflegends.com/en-us/Template:Data_Vayne/Tumble"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_116": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Camille",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Precision Protocol cast-prime timing with empowered-hit resolution and delayed second-cast window semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Camille/Precision_Protocol"
+        ]
+      },
+      {
+        "key": "Ekko",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Phase Dive two-stage dash-then-empowered-hit execution timing with target-required second-stage resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ekko/Phase_Dive"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_117": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Rengar",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Savagery cast-prime empowered-hit timing with attack-reset cadence and first-hit branch behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Rengar/Savagery"
+        ]
+      },
+      {
+        "key": "XinZhao",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Three Talon Strike three-hit empowered sequence timing, third-hit branch gating, and per-hit cooldown-reduction cadence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Xin_Zhao/Three_Talon_Strike"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_118": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Yorick",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Last Rites empowered-hit timing, attack-reset cadence, and heal/kill-branch resolution behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Yorick/Last_Rites"
+        ]
+      },
+      {
+        "key": "Trundle",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Chomp cast-prime empowered-hit timing, attack-reset cadence, and miss/parry/blind edge-condition behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Trundle/Chomp"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_119": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Volibear",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Frenzied Maul target-required strike timing with Wounded-versus-bite branch resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Volibear/Frenzied_Maul"
+        ]
+      },
+      {
+        "key": "Vi",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Relentless Force charge-prime empowered-hit timing with attack-reset cadence and primary-versus-cone branch resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Vi/Relentless_Force"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_120": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "XinZhao",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Wind Becomes Lightning two-stage cast timing (startup slash window vs post-cast thrust) and effect-level context-note truncation repair",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Xin_Zhao/Wind_Becomes_Lightning"
+        ]
+      },
+      {
+        "key": "Fiora",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Riposte poised-window strike timing and delayed post-parry damage resolution semantics with effect-level context-note truncation repair",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Fiora/Riposte"
         ]
       }
     ]

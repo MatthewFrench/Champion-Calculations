@@ -240,7 +240,12 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.25
+        "cast_windup_seconds": 0.25,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": true,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Unit.",

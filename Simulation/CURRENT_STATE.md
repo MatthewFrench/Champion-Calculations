@@ -1,4 +1,4 @@
-# Current State Snapshot (2026-02-24)
+# Current State Snapshot (2026-02-25)
 
 This file is a concise handoff for developers and AI agents.
 
@@ -117,17 +117,19 @@ This file is a concise handoff for developers and AI agents.
 - Champion controller harness phase-2 integration now routes deterministic controlled-champion command ingress through `src/champion_control_harness/*` + `src/engine/controlled_champion_controller_channels.rs`, including per-tick request sequencing, shared action execution channels, command-owned controlled movement stepping, and data-owned fixed tick-delay command execution.
 - Harness ingress now includes partial actor-symmetric control channels:
   - `queue_actor_action_request(...)` supports controlled champion and opponent actor command ingress.
-  - opponent movement `MoveToPosition`/`StopCurrentAction` is routed through deterministic queued command channels.
+  - opponent movement `MoveToPosition`, basic attack `StartBasicAttack`, and stop `StopCurrentAction` are routed through deterministic queued command channels.
+  - mapped script-backed opponent `CastAbilityBySlot` channels now execute through manual command ingress with cooldown/range legality reporting.
+  - manual-control opponents now suppress autonomous script cadence so command execution flows through controller ingress.
   - invalid actor IDs return explicit `RejectedControlledActorNotFound`.
 - Research-backed deterministic request/fast-forward guidance is now tracked in `DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`.
 
 ## Full-Game Transformation Status (Non-Data)
 - Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `100%` (`DONE`).
-- Weighted completion estimate: `57%` (`IN_PROGRESS`).
+- Weighted completion estimate: `58%` (`IN_PROGRESS`).
 - Bucket snapshot (complete / remaining):
-  - Runtime Systems Completeness (`30%` weight): `56% / 44%`
-  - Determinism And Replay Guarantees (`20%` weight): `74% / 26%`
-  - Calibration And Correctness (`20%` weight): `64% / 36%`
+  - Runtime Systems Completeness (`30%` weight): `58% / 42%`
+  - Determinism And Replay Guarantees (`20%` weight): `75% / 25%`
+  - Calibration And Correctness (`20%` weight): `65% / 35%`
   - Performance Envelope (`15%` weight): `47% / 53%`
   - Renderer-Contract Readiness (`15%` weight): `40% / 60%`
 - Canonical status and gap detail:
@@ -141,10 +143,10 @@ This file is a concise handoff for developers and AI agents.
 - Coverage breadth floor is strong, but short-iteration latency is higher than ideal.
 - Required defaults ownership is now strict and preflighted.
 - Remaining realism lift is now concentrated in command/path ownership and macro event coupling (objective/structure/economy/vision), not defaults or crash-surface channels.
-- Controller ingress now includes deterministic fixed delay, data-owned vision radius, and partial actor-symmetric opponent move/stop control, but opponent cast/basic-attack/item channels and richer buffering/drop semantics are still pending.
+- Controller ingress now includes deterministic fixed delay, data-owned vision radius, actor-symmetric opponent move/stop/basic-attack control, and mapped script-cast channels, but opponent item-active channels, non-script cast channels, and richer buffering/drop semantics are still pending.
 
 ## Highest-Value Next Work (Largest Impact First)
-1. Expand partial actor-symmetric ownership from opponent move/stop into full opponent cast/basic-attack/item legality + execution channels.
+1. Expand partial actor-symmetric ownership from opponent move/stop/basic-attack plus mapped script-cast into full opponent cast/item legality + execution channels (including non-script cast families).
 2. Couple world lifecycle channels to combat outcomes (objective defeat, structure state transitions, and respawn ownership hooks) under `src/world/*` and engine event-resolution ownership.
 3. Replace mixed movement model with terrain-aware command/path channels (pathfinding, collision, and route replanning ownership).
 4. Expand event taxonomy for macro systems (spawn/objective/economy/vision events) before adding feature logic.

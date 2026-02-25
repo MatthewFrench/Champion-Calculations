@@ -266,6 +266,12 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "charge_consumption",
+        "fixed_cooldown_seconds": null,
+        "charges_consumed_per_use": 1,
+        "recharge_model": "shop_refill_only"
+      },
       "trigger": "on_activate",
       "applies_to": "target_location",
       "conditions": [
@@ -322,7 +328,8 @@
       "Execution-semantics review confirms Shared Riches is target/range gated: charge spend only occurs with an ally nearby and resolves on minion-kill execute or champion/structure damage events.",
       "Sell-state policy resolved for support-quest staging: represent page-verified No Sell behavior with shop.prices.sell = 0 for quest-stage items.",
       "Tier-1 dataset discrepancy is intentionally tracked: Data Dragon and CommunityDragon still list sell=160 for this item while page-level gameplay behavior shows No Sell.",
-      "Quality normalization (2026-02-24): missing parse_confidence metadata on ward utility branches was backfilled after manual review."
+      "Quality normalization (2026-02-24): missing parse_confidence metadata on ward utility branches was backfilled after manual review.",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` schema (support ward-charge shop-refill model)."
     ]
   },
   "sources": [

@@ -96,12 +96,9 @@ pub(crate) fn validate_champion_action_request(
             }
         }
         ChampionActionRequest::StartBasicAttack { target_actor_id } => {
-            if view.basic_attack_readiness.remaining_cooldown_seconds > 0.0 {
-                ChampionActionStatus::RejectedAbilityOnCooldown {
-                    ability_id: "basic_attack".to_string(),
-                    remaining_seconds: view.basic_attack_readiness.remaining_cooldown_seconds,
-                }
-            } else if let Some(target_projection) =
+            // StartBasicAttack is a target-intent command. Cooldown gating is enforced by the
+            // runtime attack scheduler, while validation enforces perspective legality.
+            if let Some(target_projection) =
                 visible_actor_targeting_projection(view, target_actor_id)
             {
                 if target_projection.distance_to_controlled_actor

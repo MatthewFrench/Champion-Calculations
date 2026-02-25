@@ -27,6 +27,12 @@ pub(in crate::engine) struct QueuedActorActionRequest {
     pub request: ChampionActionRequest,
 }
 
+#[derive(Debug, Clone, Copy)]
+struct EnemyScriptCastChannel {
+    script_event: ChampionScriptEvent,
+    cast_range: f64,
+}
+
 impl ControlledChampionCombatSimulation {
     #[allow(dead_code)]
     pub(crate) fn set_controlled_champion_controller_policy(
@@ -235,6 +241,29 @@ impl ControlledChampionCombatSimulation {
             .remove(actor_id);
     }
 
+    pub(in crate::engine) fn set_enemy_basic_attack_target(
+        &mut self,
+        actor_id: &str,
+        target_actor_id: &str,
+    ) {
+        self.enemy_basic_attack_target_actor_id_by_actor_id
+            .insert(actor_id.to_string(), target_actor_id.to_string());
+    }
+
+    pub(in crate::engine) fn clear_enemy_basic_attack_target(&mut self, actor_id: &str) {
+        self.enemy_basic_attack_target_actor_id_by_actor_id
+            .remove(actor_id);
+    }
+
+    pub(in crate::engine) fn enemy_basic_attack_target_actor_id(
+        &self,
+        actor_id: &str,
+    ) -> Option<&str> {
+        self.enemy_basic_attack_target_actor_id_by_actor_id
+            .get(actor_id)
+            .map(String::as_str)
+    }
+
     fn apply_runtime_actor_action_support_constraints(
         &self,
         controlled_actor_id: &str,
@@ -264,6 +293,34 @@ impl ControlledChampionCombatSimulation {
             status_report.status = ChampionActionStatus::RejectedTargetInvalidForAction {
                 target_actor_id: target_actor_id.clone(),
                 reason: "target actor is not a supported opponent champion target".to_string(),
+            };
+        }
+        if controlled_actor_id != self.controlled_champion_world_actor_id
+            && let ChampionActionRequest::StartBasicAttack { target_actor_id } =
+                &status_report.request
+            && target_actor_id != &self.controlled_champion_world_actor_id
+        {
+            status_report.status = ChampionActionStatus::RejectedTargetInvalidForAction {
+                target_actor_id: target_actor_id.clone(),
+                reason: format!(
+                    "target actor is not a supported controlled champion target (`{}`)",
+                    self.controlled_champion_world_actor_id
+                ),
+            };
+        }
+        if controlled_actor_id != self.controlled_champion_world_actor_id
+            && let ChampionActionRequest::CastAbilityBySlot {
+                target_actor_id: Some(target_actor_id),
+                ..
+            } = &status_report.request
+            && target_actor_id != &self.controlled_champion_world_actor_id
+        {
+            status_report.status = ChampionActionStatus::RejectedTargetInvalidForAction {
+                target_actor_id: target_actor_id.clone(),
+                reason: format!(
+                    "target actor is not a supported controlled champion cast target (`{}`)",
+                    self.controlled_champion_world_actor_id
+                ),
             };
         }
 
@@ -309,10 +366,15 @@ impl ControlledChampionCombatSimulation {
         {
             return false;
         }
-        matches!(
-            request,
-            ChampionActionRequest::MoveToPosition { .. } | ChampionActionRequest::StopCurrentAction
-        )
+        match request {
+            ChampionActionRequest::MoveToPosition { .. }
+            | ChampionActionRequest::StartBasicAttack { .. }
+            | ChampionActionRequest::StopCurrentAction => true,
+            ChampionActionRequest::CastAbilityBySlot { ability_slot, .. } => self
+                .enemy_script_cast_channel_for_slot(controlled_actor_id, *ability_slot)
+                .is_some(),
+            ChampionActionRequest::UseItemActive { .. } => false,
+        }
     }
 
     fn controlled_champion_supports_ability_id(&self, ability_id: &str) -> bool {
@@ -390,10 +452,41 @@ impl ControlledChampionCombatSimulation {
             }
             ChampionActionRequest::StopCurrentAction => {
                 self.clear_enemy_move_command(&queued_action_request.controlled_actor_id);
+                self.clear_enemy_basic_attack_target(&queued_action_request.controlled_actor_id);
+                if let Some(enemy_index) =
+                    self.resolve_enemy_index_by_actor_id(&queued_action_request.controlled_actor_id)
+                {
+                    let _ = self.invalidate_enemy_attack_sequence(enemy_index);
+                }
             }
-            ChampionActionRequest::CastAbilityBySlot { .. }
-            | ChampionActionRequest::StartBasicAttack { .. }
-            | ChampionActionRequest::UseItemActive { .. } => {}
+            ChampionActionRequest::StartBasicAttack { target_actor_id } => {
+                self.set_enemy_basic_attack_target(
+                    &queued_action_request.controlled_actor_id,
+                    &target_actor_id,
+                );
+            }
+            ChampionActionRequest::CastAbilityBySlot { ability_slot, .. } => {
+                let Some(enemy_index) = self
+                    .resolve_enemy_index_by_actor_id(&queued_action_request.controlled_actor_id)
+                else {
+                    return;
+                };
+                let Some(script_cast_channel) = self.enemy_script_cast_channel_for_slot(
+                    &queued_action_request.controlled_actor_id,
+                    ability_slot,
+                ) else {
+                    return;
+                };
+                let Some(script_epoch) = self.enemy_script_epoch(enemy_index) else {
+                    return;
+                };
+                self.resolve_enemy_champion_script_event_for_manual_command(
+                    enemy_index,
+                    script_cast_channel.script_event,
+                    script_epoch,
+                );
+            }
+            ChampionActionRequest::UseItemActive { .. } => {}
         }
     }
 
@@ -681,10 +774,30 @@ impl ControlledChampionCombatSimulation {
         let enemy_index = self.resolve_enemy_index_by_actor_id(controlled_actor_id)?;
         let enemy_state = self.enemy_state.get(enemy_index)?;
         let mut action_runtime_state = ChampionActionRuntimeState {
-            basic_attack_ready_at_seconds: self.time,
+            basic_attack_ready_at_seconds: self
+                .event_queue
+                .next_enemy_attack_ready_at(enemy_index)
+                .unwrap_or(self.time),
             basic_attack_range: enemy_state.behavior.attack_range.max(0.0),
             ..ChampionActionRuntimeState::default()
         };
+        let champion_name = enemy_state.enemy.base.name.as_str();
+        let enemy_loadout = default_champion_ability_loadout(champion_name);
+        for (ability_slot, ability_id) in enemy_loadout.slot_bindings() {
+            let Some(script_cast_channel) =
+                self.enemy_script_cast_channel_for_slot(controlled_actor_id, ability_slot)
+            else {
+                continue;
+            };
+            let script_ready_at = self
+                .enemy_script_event_ready_at_or_zero(enemy_index, script_cast_channel.script_event);
+            action_runtime_state
+                .ability_ready_at_seconds_by_id
+                .insert(ability_id.to_string(), script_ready_at);
+            action_runtime_state
+                .ability_cast_range_by_id
+                .insert(ability_id.to_string(), script_cast_channel.cast_range);
+        }
 
         let lock_until_seconds = enemy_state
             .respawn_at
@@ -707,6 +820,22 @@ impl ControlledChampionCombatSimulation {
         ))
     }
 
+    fn enemy_script_cast_channel_for_slot(
+        &self,
+        controlled_actor_id: &str,
+        ability_slot: AbilitySlotKey,
+    ) -> Option<EnemyScriptCastChannel> {
+        let ability_id = self.enemy_ability_id_for_slot(controlled_actor_id, ability_slot)?;
+        let enemy_index = self.resolve_enemy_index_by_actor_id(controlled_actor_id)?;
+        let champion_name = self.enemy_state.get(enemy_index)?.enemy.base.name.as_str();
+        let script_event = champion_script_event_for_ability_id(champion_name, &ability_id)?;
+        let cast_range = champion_script_event_cast_range(champion_name, script_event)?;
+        Some(EnemyScriptCastChannel {
+            script_event,
+            cast_range: cast_range.max(0.0),
+        })
+    }
+
     fn resolve_enemy_index_by_actor_id(&self, actor_id: &str) -> Option<usize> {
         self.enemy_state
             .iter()
@@ -719,6 +848,19 @@ impl ControlledChampionCombatSimulation {
             .into_iter()
             .find(|(slot, _)| *slot == ability_slot)
             .map(|(_, ability_id)| ability_id)
+    }
+
+    fn enemy_ability_id_for_slot(
+        &self,
+        controlled_actor_id: &str,
+        ability_slot: AbilitySlotKey,
+    ) -> Option<String> {
+        let enemy_loadout = self.enemy_actor_ability_loadout(controlled_actor_id)?;
+        enemy_loadout
+            .slot_bindings()
+            .into_iter()
+            .find(|(slot, _)| *slot == ability_slot)
+            .map(|(_, ability_id)| ability_id.to_string())
     }
 
     fn next_controlled_champion_action_request_sequence(&mut self) -> u64 {

@@ -454,7 +454,300 @@ fn enemy_actor_cast_request_returns_explicit_unsupported_status() {
             action_status.status,
             crate::champion_control_harness::ChampionActionStatus::RejectedUnsupportedAction { .. }
         ),
-        "enemy cast action should return explicit unsupported status until enemy cast channels are integrated"
+        "enemy cast action should return explicit unsupported status when no mapped script-cast channel exists"
+    );
+}
+
+#[test]
+fn enemy_manual_control_disables_autonomous_script_casts_without_manual_cast_command() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_manual_script_disabled_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_manual_script_disabled_actor",
+        crate::champion_control_harness::ChampionActionRequest::MoveToPosition {
+            target_position: crate::world::WorldActorPosition { x: 300.0, y: 0.0 },
+        },
+    );
+    assert!(matches!(
+        status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+
+    let health_before = runner.health;
+    for _ in 0..180 {
+        runner.step(1);
+    }
+    assert!(
+        (runner.health - health_before).abs() < 1e-9,
+        "manual-control enemies should not execute autonomous script cadence without explicit cast commands"
+    );
+}
+
+#[test]
+fn enemy_actor_script_cast_request_accepts_supported_slot_and_applies_damage() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_manual_script_cast_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_manual_script_cast_actor",
+        crate::champion_control_harness::ChampionActionRequest::CastAbilityBySlot {
+            ability_slot: crate::scripts::runtime::ability_slots::AbilitySlotKey::Q,
+            target_actor_id: Some("controlled_champion".to_string()),
+            target_position: None,
+        },
+    );
+    assert!(matches!(
+        action_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+
+    let health_before = runner.health;
+    for _ in 0..120 {
+        runner.step(1);
+    }
+    assert!(
+        runner.health < health_before,
+        "manual script-cast command should execute a mapped enemy script event and deal damage"
+    );
+}
+
+#[test]
+fn enemy_actor_script_cast_request_reports_cooldown_after_successful_cast() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_manual_script_cooldown_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let first_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_manual_script_cooldown_actor",
+        crate::champion_control_harness::ChampionActionRequest::CastAbilityBySlot {
+            ability_slot: crate::scripts::runtime::ability_slots::AbilitySlotKey::Q,
+            target_actor_id: Some("controlled_champion".to_string()),
+            target_position: None,
+        },
+    );
+    assert!(matches!(
+        first_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+    for _ in 0..60 {
+        runner.step(1);
+    }
+
+    let second_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_manual_script_cooldown_actor",
+        crate::champion_control_harness::ChampionActionRequest::CastAbilityBySlot {
+            ability_slot: crate::scripts::runtime::ability_slots::AbilitySlotKey::Q,
+            target_actor_id: Some("controlled_champion".to_string()),
+            target_position: None,
+        },
+    );
+    assert!(
+        matches!(
+            second_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedAbilityOnCooldown { .. }
+        ),
+        "second command should report explicit cooldown rejection while the mapped script cast is cooling down"
+    );
+}
+
+#[test]
+fn enemy_manual_control_without_attack_target_prevents_auto_attack_hits() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Enemy Manual No Attack");
+    enemy.id = "enemy_manual_no_attack_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_manual_no_attack_actor",
+        crate::champion_control_harness::ChampionActionRequest::MoveToPosition {
+            target_position: crate::world::WorldActorPosition { x: 300.0, y: 0.0 },
+        },
+    );
+    assert!(matches!(
+        action_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+
+    let health_before = runner.health;
+    for _ in 0..120 {
+        runner.step(1);
+    }
+    assert!(
+        (runner.health - health_before).abs() < 1e-9,
+        "manually controlled enemy should not auto-attack without an explicit StartBasicAttack target command"
+    );
+}
+
+#[test]
+fn enemy_actor_start_basic_attack_request_accepts_controlled_target_and_deals_damage() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Enemy Manual Attack");
+    enemy.id = "enemy_manual_attack_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_manual_attack_actor",
+        crate::champion_control_harness::ChampionActionRequest::StartBasicAttack {
+            target_actor_id: "controlled_champion".to_string(),
+        },
+    );
+    assert!(matches!(
+        action_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+
+    let health_before = runner.health;
+    for _ in 0..120 {
+        runner.step(1);
+    }
+    assert!(
+        runner.health < health_before,
+        "enemy start basic attack command should enable manual attack execution against controlled champion"
+    );
+}
+
+#[test]
+fn enemy_actor_start_basic_attack_rejects_non_controlled_target() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut enemy_a = test_enemy("Enemy Manual Attack A");
+    enemy_a.id = "enemy_manual_attack_actor_a".to_string();
+    enemy_a.spawn_position_xy = Some((300.0, 0.0));
+    let mut enemy_b = test_enemy("Enemy Manual Attack B");
+    enemy_b.id = "enemy_manual_attack_actor_b".to_string();
+    enemy_b.spawn_position_xy = Some((350.0, 0.0));
+    let enemies = vec![
+        (enemy_a, Vec::new(), Stats::default()),
+        (enemy_b, Vec::new(), Stats::default()),
+    ];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_manual_attack_actor_a",
+        crate::champion_control_harness::ChampionActionRequest::StartBasicAttack {
+            target_actor_id: "enemy_manual_attack_actor_b".to_string(),
+        },
+    );
+    assert!(
+        matches!(
+            action_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedTargetInvalidForAction { .. }
+        ),
+        "enemy basic attack requests should reject non-controlled-champion targets"
     );
 }
 

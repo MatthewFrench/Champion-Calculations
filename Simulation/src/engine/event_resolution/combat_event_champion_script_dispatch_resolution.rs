@@ -7,9 +7,42 @@ impl ControlledChampionCombatSimulation {
         script_event: ChampionScriptEvent,
         epoch: u64,
     ) {
+        self.resolve_enemy_champion_script_event_internal(idx, script_event, epoch, false);
+    }
+
+    pub(in crate::engine) fn resolve_enemy_champion_script_event_for_manual_command(
+        &mut self,
+        idx: usize,
+        script_event: ChampionScriptEvent,
+        epoch: u64,
+    ) {
+        self.resolve_enemy_champion_script_event_internal(idx, script_event, epoch, true);
+    }
+
+    // Manual-control actors must not execute autonomous script cadence. The dedicated manual
+    // command channel can still invoke the same resolver to preserve cooldown/timing semantics.
+    fn resolve_enemy_champion_script_event_internal(
+        &mut self,
+        idx: usize,
+        script_event: ChampionScriptEvent,
+        epoch: u64,
+        allow_manual_control_override: bool,
+    ) {
         if idx >= self.enemy_count()
             || !self.enemy_script_epoch_matches(idx, epoch)
             || !self.enemy_can_take_actions(idx)
+        {
+            return;
+        }
+        let Some(enemy_actor_id) = self
+            .enemy_state
+            .get(idx)
+            .map(|state| state.enemy.id.as_str())
+        else {
+            return;
+        };
+        if !allow_manual_control_override
+            && self.enemy_actor_manual_control_mode_enabled(enemy_actor_id)
         {
             return;
         }

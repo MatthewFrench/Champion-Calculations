@@ -142,6 +142,12 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "charge_consumption",
+        "fixed_cooldown_seconds": null,
+        "charges_consumed_per_use": 1,
+        "recharge_model": "shop_refill_only"
+      },
       "trigger": "on_activate",
       "applies_to": "target_location",
       "conditions": [
@@ -196,7 +202,8 @@
     "context_notes": [
       "Solstice Sleigh is modeled as an engage-support utility item: crowd-control procs grant brief speed plus bonus health to self and the lowest-health nearby ally.",
       "Support-income diminishing minion-gold behavior now encodes page-verified threshold formulas and reduction ranges (pre-5-minutes and post-5-minutes), while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies.",
-      "Quality normalization (2026-02-24): missing parse_confidence metadata on ward utility branches was backfilled after manual review."
+      "Quality normalization (2026-02-24): missing parse_confidence metadata on ward utility branches was backfilled after manual review.",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` schema (support ward-charge shop-refill model)."
     ]
   },
   "sources": [

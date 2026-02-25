@@ -26,6 +26,12 @@
       "duration_seconds": 15.0,
       "cooldown_seconds": null,
       "interval_seconds": 0.5,
+      "activation_cadence": {
+        "model": "consumable_single_use",
+        "fixed_cooldown_seconds": null,
+        "consumes_item_on_use": true,
+        "charges_consumed_per_use": 1
+      },
       "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [
@@ -68,7 +74,8 @@
     "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
       "Health Potion is modeled as manual sustain: activation consumes the item and applies healing over time (not instant burst).",
-      "In-game behavior note: activation is treated as unavailable at full health under normal use."
+      "In-game behavior note: activation is treated as unavailable at full health under normal use.",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` schema (consumable single-use model)."
     ]
   },
   "sources": [

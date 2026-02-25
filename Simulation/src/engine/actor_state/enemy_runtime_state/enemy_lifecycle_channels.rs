@@ -29,6 +29,7 @@ impl ControlledChampionCombatSimulation {
         for (idx, name, epoch) in respawned {
             let champion_name = self.enemy_state[idx].enemy.name.clone();
             let poll_interval = self.enemy_state[idx].script_poll_interval_seconds.max(0.05);
+            let enemy_actor_id = self.enemy_state[idx].enemy.id.clone();
             for event in scripted_champion_events(&champion_name) {
                 self.schedule_event(
                     0.0,
@@ -39,7 +40,6 @@ impl ControlledChampionCombatSimulation {
             }
             self.trace_event("enemy_respawn", format!("{} respawned", name));
             let respawn_position = self.enemy_state[idx].position;
-            let enemy_actor_id = self.enemy_state[idx].enemy.id.clone();
             self.world_state.upsert_actor_position_clamped(
                 &enemy_actor_id,
                 WorldActorClass::Champion,
@@ -49,6 +49,8 @@ impl ControlledChampionCombatSimulation {
                     y: respawn_position.y,
                 },
             );
+            self.clear_enemy_move_command(&enemy_actor_id);
+            self.clear_enemy_basic_attack_target(&enemy_actor_id);
         }
     }
 
@@ -72,6 +74,10 @@ impl ControlledChampionCombatSimulation {
                 state.script_epoch == epoch && state.respawn_at.is_none() && state.health > 0.0
             })
             .unwrap_or(false)
+    }
+
+    pub(in crate::engine) fn enemy_script_epoch(&self, idx: usize) -> Option<u64> {
+        self.enemy_state.get(idx).map(|state| state.script_epoch)
     }
 
     pub(in crate::engine) fn enemy_script_epoch_matches(&self, idx: usize, epoch: u64) -> bool {

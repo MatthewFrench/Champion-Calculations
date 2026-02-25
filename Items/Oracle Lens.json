@@ -24,6 +24,12 @@
       "duration_seconds": 8.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "charge_consumption",
+        "fixed_cooldown_seconds": null,
+        "charges_consumed_per_use": 1,
+        "recharge_model": "time_based_charges"
+      },
       "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [
@@ -139,7 +145,8 @@
     "context_notes": [
       "Execution model: Oracle Lens is a charge-consuming active that follows the owner for 8 seconds; detection radius scales by owner level (600 to 750 range) and the cast itself is not target-locked.",
       "Charge/cadence semantics: Oracle Lens stores 2 charges and recharges from 160 to 100 seconds based on average champion level, with trinket cooldown behavior affected by item haste.",
-      "Player-visible reveal branch: while active, attacking a ward briefly reveals that ward to the user's team for 2 seconds."
+      "Player-visible reveal branch: while active, attacking a ward briefly reveals that ward to the user's team for 2 seconds.",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` charge-consumption schema."
     ]
   },
   "sources": [

@@ -31,6 +31,12 @@
       "duration_seconds": 12.0,
       "cooldown_seconds": null,
       "interval_seconds": 0.5,
+      "activation_cadence": {
+        "model": "charge_consumption",
+        "fixed_cooldown_seconds": null,
+        "charges_consumed_per_use": 1,
+        "recharge_model": "shop_refill_only"
+      },
       "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [
@@ -100,7 +106,8 @@
     "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
       "Refillable Potion is modeled as charge-gated sustain: each activation consumes one charge and heals over time.",
-      "In-game behavior note: activation is treated as unavailable at full health and in allied spawn."
+      "In-game behavior note: activation is treated as unavailable at full health and in allied spawn.",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` schema (shop-refill charge model)."
     ]
   },
   "sources": [

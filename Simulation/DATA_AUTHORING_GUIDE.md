@@ -23,6 +23,7 @@ Start here before implementation:
   - strict-fragment context-note queue currently `0` entries across `0` champion files (cleared and held in waves 63-75)
   - secondary cadence-fragment queue (`every 0.` class) currently `0` entries across `0` champion files (cleared in post-wave audit)
   - tertiary article-token queue (`during the 0.` class) currently `0` entries across `0` champion files (cleared in post-wave audit)
+  - effect-level truncation queue (`effects[*].context_notes`) currently `0` entries across `0` champion files (wave 120 repaired prior `XinZhao`/`Fiora` fragments and established no-regression sweeps)
   - champion ability `description_source` completeness currently `860/860` (`0` missing across `0` champions)
 - Current champion data priority is no-regression fidelity maintenance and unresolved-confidence follow-up (execution semantics depth, context-note completeness, and ambiguity tracking), not file-creation parity.
 - Structured-item parse-confidence completeness is currently fully normalized:
@@ -278,10 +279,12 @@ Priority C. Champion inventory and planning hygiene:
 - For cast-distance-scaled area-size abilities, document min/max radius behavior and track runtime follow-up if current runtime cannot interpolate dynamic radius.
 25. Champion attack-cadence semantic-key rollout:
 - For non-trivial cast-vs-hit abilities, encode source-verified execution semantics directly in `execution` using stable keys (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`) so downstream runtime logic can consume deterministic behavior metadata.
-- Current semantic-key baseline is `10/682` active abilities with explicit `resolution_timing`; keep expanding this queue on high-impact empowered-hit abilities.
+- Use only canonical enum-like values for `execution.resolution_timing` from `Simulation/data/execution_semantics_vocabulary.json`; if a new timing class is needed, update the vocabulary file in the same change.
+- Current semantic-key baseline is `18/682` active abilities with explicit `resolution_timing`; keep expanding this queue on high-impact empowered-hit abilities.
 26. Item active cooldown metadata completeness:
 - When active cooldown values are source-published, encode `cooldown_seconds` consistently across every structured branch tied to that active (damage, movement, cast-rule, and follow-up effects).
 - Track intentional no-fixed-cooldown `on_activate` effects separately (charge/consume/single-use/round-limited) so they are not conflated with missing cooldown defects.
+- For no-fixed-cooldown `on_activate` effects, encode `effects_structured[].activation_cadence` with canonical `model` values from `Simulation/data/execution_semantics_vocabulary.json`.
 27. Rune narrative decimal-format hygiene:
 - Keep rune narrative fields (`wiki_descriptions`, touched `long_desc`) free of generated decimal-spacing artifacts (`x. y`), and preserve flat/split parity after normalization.
 
@@ -315,6 +318,25 @@ Priority C. Champion inventory and planning hygiene:
   - Completed item active-cooldown completeness wave 115 (`Ravenous Hydra`):
     - added page-verified `10s` active cooldown metadata for `ravenous_crescent_active_physical_damage`
     - refreshed context/provenance notes and review timestamp (`effects_structured_reviewed = 2026-02-24`)
+  - Completed champion execution-semantics wave 116 (`Camille` `Precision Protocol`, `Ekko` `Phase Dive`):
+    - encoded explicit `resolution_timing` plus companion attack-cadence semantic keys using canonical vocabulary
+    - added page-level tracker wave scope for both champions
+  - Completed champion execution-semantics wave 117 (`Rengar` `Savagery`, `XinZhao` `Three Talon Strike`):
+    - encoded explicit attack-cadence semantic keys for empowered-hit and multi-hit sequence timing behavior
+    - added page-level source provenance for `Three Talon Strike` and tracker wave scope for both champions
+  - Completed champion execution-semantics wave 118 (`Yorick` `Last Rites`, `Trundle` `Chomp`):
+    - encoded explicit attack-cadence semantic keys for empowered-hit timing and edge-condition resolution windows
+    - added page-level tracker wave scope for both champions
+  - Completed champion execution-semantics wave 119 (`Volibear` `Frenzied Maul`, `Vi` `Relentless Force`):
+    - encoded explicit attack-cadence semantic keys for target-required strike timing and charge-primed empowered-hit behavior
+    - added page-level tracker wave scope for both champions
+  - Completed champion effect-level truncation normalization wave 120 (`XinZhao` `Wind Becomes Lightning`, `Fiora` `Riposte`):
+    - repaired all discovered effect-level context-note timing fragments (`5` entries -> `0`) and aligned wording to page-level template timing semantics
+    - added page-level template provenance for both touched abilities and recorded tracker wave scope
+    - expanded no-regression truncation auditing scope to include `effects[*].context_notes` in addition to ability-level `context_notes`
+  - Completed item activation-cadence schema wave 120 (item pass):
+    - added reusable `activation_cadence` objects to all currently tracked `on_activate` entries without fixed cooldown (`11` effects across `10` files) using canonical models (`charge_consumption`, `consumable_single_use`, `single_use_transform`, `round_limited_uses`)
+    - documented this schema as canonical in coverage standards/checklist and centralized enum vocabulary file
   - Completed champion execution-semantics wave 103 (`Nasus` `Spirit Fire`):
     - manually re-verified delayed first-impact timing, periodic zone-tick cadence, and armor-reduction linger semantics
     - expanded context-note execution semantics and schema notes with page-level template provenance

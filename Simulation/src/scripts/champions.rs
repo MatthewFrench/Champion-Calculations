@@ -19,7 +19,8 @@ pub(crate) use self::champion_script_effect_types::{
     ScriptedEffectHitbox,
 };
 pub(crate) use self::champion_script_event_channels::{
-    champion_script_event_cooldown_seconds, champion_script_event_label,
+    champion_script_event_cast_range, champion_script_event_cooldown_seconds,
+    champion_script_event_for_ability_id, champion_script_event_label,
     execute_champion_script_event, scripted_champion_events,
 };
 pub(crate) use self::runtime_effect_channels::{

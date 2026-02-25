@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "reviewed_at": "2026-02-25",
+  "purpose": "Canonical enum-like vocabulary for champion execution resolution timing and item activation cadence semantics in data-first authoring.",
+  "champion_execution": {
+    "resolution_timing_enum": [
+      {
+        "value": "on_cast_complete",
+        "meaning": "Effect resolution occurs at cast completion, without waiting for a subsequent empowered basic-attack contact."
+      },
+      {
+        "value": "on_empowered_basic_attack_hit",
+        "meaning": "Cast primes an empowered basic attack; effect resolution occurs only when that empowered hit lands."
+      },
+      {
+        "value": "on_empowered_basic_attack_or_leap_strike_hit",
+        "meaning": "Primed effect can resolve either on empowered basic-attack hit or on an allowed ability-hit consume path."
+      },
+      {
+        "value": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "meaning": "Two-phase model: cast immediately applies self-state/buff, while combat payload resolves on empowered basic-attack hit."
+      },
+      {
+        "value": "dash_on_cast_then_on_empowered_basic_attack_hit",
+        "meaning": "Two-phase model: cast-time dash/reposition occurs first, then combat payload resolves on empowered basic-attack hit."
+      }
+    ],
+    "required_companion_fields_guidance": {
+      "on_empowered_basic_attack_hit": [
+        "target_required",
+        "max_empowered_attacks",
+        "cancels_if_target_invalid_before_resolution"
+      ],
+      "on_cast_for_self_buff_then_on_empowered_basic_attack_hit": [
+        "target_required",
+        "max_empowered_attacks",
+        "cancels_if_target_invalid_before_resolution"
+      ],
+      "dash_on_cast_then_on_empowered_basic_attack_hit": [
+        "target_required",
+        "max_empowered_attacks",
+        "cancels_if_target_invalid_before_resolution"
+      ]
+    }
+  },
+  "item_execution": {
+    "activation_cadence_model_enum": [
+      {
+        "value": "fixed_cooldown",
+        "meaning": "Activation is primarily cadence-limited by a fixed cooldown (`cooldown_seconds`)."
+      },
+      {
+        "value": "charge_consumption",
+        "meaning": "Activation consumes one or more charges; cadence is governed by charge stock and recharge behavior."
+      },
+      {
+        "value": "consumable_single_use",
+        "meaning": "Activation consumes the item instance; no reusable fixed cooldown applies."
+      },
+      {
+        "value": "single_use_transform",
+        "meaning": "Activation is single-use and transforms the item into a replacement state/item after use."
+      },
+      {
+        "value": "round_limited_uses",
+        "meaning": "Activation cadence is limited by per-round usage caps rather than fixed cooldown timers."
+      }
+    ],
+    "schema_contract": {
+      "activation_cadence_field": "effects_structured[].activation_cadence",
+      "required_keys": [
+        "model",
+        "fixed_cooldown_seconds"
+      ]
+    }
+  }
+}

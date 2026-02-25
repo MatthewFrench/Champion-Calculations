@@ -1,6 +1,15 @@
 use super::*;
 
 impl ControlledChampionCombatSimulation {
+    pub(in crate::engine) fn invalidate_enemy_attack_sequence(
+        &mut self,
+        idx: usize,
+    ) -> Option<u64> {
+        let state = self.enemy_state.get_mut(idx)?;
+        state.attack_sequence = state.attack_sequence.wrapping_add(1);
+        Some(state.attack_sequence)
+    }
+
     pub(in crate::engine) fn begin_enemy_attack_sequence(&mut self, idx: usize) -> Option<u64> {
         let state = self.enemy_state.get_mut(idx)?;
         state.attack_sequence = state.attack_sequence.wrapping_add(1);

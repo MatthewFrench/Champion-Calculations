@@ -28,6 +28,13 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "round_limited_uses",
+        "fixed_cooldown_seconds": null,
+        "base_uses_per_round": 2,
+        "augmented_uses_per_round": 3,
+        "augmentation_condition": "apex_inventor"
+      },
       "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [
@@ -85,7 +92,8 @@
     "context_notes": [
       "Imbricate is modeled as an Arena-specific per-round reroll mechanic with a base two-reroll cap and Apex Inventor augmentation to three rerolls.",
       "Per-reroll stat growth is behaviorally confirmed but exact per-reroll numeric increments are not exposed in canonical text.",
-      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400).",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` schema (round-limited reroll model)."
     ]
   },
   "sources": [

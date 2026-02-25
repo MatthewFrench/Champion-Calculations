@@ -33,6 +33,12 @@
       "duration_seconds": 2.5,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "single_use_transform",
+        "fixed_cooldown_seconds": null,
+        "consumes_item_on_use": true,
+        "replacement_item": "Shattered Armguard"
+      },
       "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [
@@ -87,7 +93,8 @@
     "context_notes": [
       "Seeker's Armguard is represented as the Time Stop active variant (single-use stasis entry) in the current dataset/version and transforms into Shattered Armguard after use.",
       "Execution-semantics review: Time Stop is immediate (no cast time), grants 2.5 seconds of self stasis/untargetability/invulnerability, and prevents movement, attacks, abilities, summoner spells, and item activations while active.",
-      "Interaction note: page notes include a post-activation Quicksilver lockout window (0.5 seconds) and no stealth break on cast."
+      "Interaction note: page notes include a post-activation Quicksilver lockout window (0.5 seconds) and no stealth break on cast.",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` schema (single-use transform model)."
     ]
   },
   "sources": [

@@ -27,6 +27,12 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "charge_consumption",
+        "fixed_cooldown_seconds": null,
+        "charges_consumed_per_use": 1,
+        "recharge_model": "time_based_charges"
+      },
       "trigger": "on_activate",
       "applies_to": "target_location",
       "conditions": [
@@ -141,7 +147,8 @@
     "context_notes": [
       "Execution model: Scarecrow Effigy is a charge-based trinket placement with vector-targeted placement range and level-scaled lifetime vision payload.",
       "Player-visible behavior: enemy approach activates disguise behavior, triggers danger ping/fake-action animation for up to 2 seconds, then self-destructs if not destroyed first.",
-      "Page notes include additional edge rules (hard-crowd-control death behavior, untargetability window, and item-haste cooldown scaling) that are documented but not fully encoded as structured combat-state rules."
+      "Page notes include additional edge rules (hard-crowd-control death behavior, untargetability window, and item-haste cooldown scaling) that are documented but not fully encoded as structured combat-state rules.",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` charge-consumption schema."
     ]
   },
   "sources": [

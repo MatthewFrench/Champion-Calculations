@@ -27,6 +27,12 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "charge_consumption",
+        "fixed_cooldown_seconds": null,
+        "charges_consumed_per_use": 1,
+        "recharge_model": "time_based_charges"
+      },
       "trigger": "on_activate",
       "applies_to": "target_location",
       "ward_type": "farsight",
@@ -60,6 +66,12 @@
       "duration_seconds": 2.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "charge_consumption",
+        "fixed_cooldown_seconds": null,
+        "charges_consumed_per_use": 1,
+        "recharge_model": "time_based_charges"
+      },
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -155,7 +167,8 @@
     "context_notes": [
       "Execution model: Farsight Alteration is a long-range targeted trinket cast (4000 range) that places a visible persistent ward and separately grants an immediate 2-second area reveal at cast location.",
       "Detection branch: when the Farsight Ward sees an enemy champion, it temporarily expands to 800 sight radius and then self-destructs after 3 seconds.",
-      "Acquisition/charge semantics: purchase is gated to level 9 and recharge scales from 198 to 99 seconds by average champion level (item-haste affected)."
+      "Acquisition/charge semantics: purchase is gated to level 9 and recharge scales from 198 to 99 seconds by average champion level (item-haste affected).",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` charge-consumption schema."
     ]
   },
   "sources": [

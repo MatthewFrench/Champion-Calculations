@@ -1,6 +1,6 @@
 # Full Game Simulation Blueprint
 
-Last updated: 2026-02-24
+Last updated: 2026-02-25
 
 ## Purpose
 Define everything required, beyond JSON data coverage alone, to move this repository from a deterministic URF controlled-champion combat optimizer to a near-full League-like simulation engine that could drive a renderer with game-like behavior.
@@ -57,7 +57,7 @@ Current non-data scope limitations:
 - event taxonomy is combat-centric and does not include macro-map actions (`Simulation/src/engine/event_queue/event_type_catalog.rs`)
 - script event roster is narrow for enemies (`Simulation/src/scripts/champions/champion_script_event_channels.rs`)
 - runtime contracts do not yet represent full-map entities and macro state (`Simulation/src/simulation_contracts/runtime_actor_contracts.rs`)
-- controller harness now owns deterministic champion command ingress and legality/status handling, with partial actor-symmetric ingress (opponent move/stop control), but full opponent action-channel adoption is still pending (`Simulation/src/champion_control_harness/*`, `Simulation/src/engine/*`)
+- controller harness now owns deterministic champion command ingress and legality/status handling, with partial actor-symmetric ingress (opponent move/stop/basic-attack plus mapped script-cast control), but full opponent action-channel adoption is still pending (`Simulation/src/champion_control_harness/*`, `Simulation/src/engine/*`)
 
 ## Required Capability Areas (Non-Data)
 
@@ -315,18 +315,18 @@ Status labels:
 - `DONE`
 - `BLOCKED`
 
-## Current Status Snapshot (2026-02-24)
-Overall weighted completion estimate for this blueprint: `57%` (`IN_PROGRESS`).
+## Current Status Snapshot (2026-02-25)
+Overall weighted completion estimate for this blueprint: `58%` (`IN_PROGRESS`).
 
 Bucket status (complete / remaining):
-- Runtime Systems Completeness (`30%` weight): `56% / 44%`
-  - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation, baseline non-champion world ecology anchors, runtime minion-wave spawn/despawn lifecycle channels, neutral-objective spawn/respawn lifecycle channels, world-owned enemy movement/respawn position channels, controller harness contracts, deterministic controller request ingress with fixed-delay execution, command-owned controlled champion movement stepping, and partial actor-symmetric opponent move/stop command execution channels
+- Runtime Systems Completeness (`30%` weight): `58% / 42%`
+  - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation, baseline non-champion world ecology anchors, runtime minion-wave spawn/despawn lifecycle channels, neutral-objective spawn/respawn lifecycle channels, world-owned enemy movement/respawn position channels, controller harness contracts, deterministic controller request ingress with fixed-delay execution, command-owned controlled champion movement stepping, partial actor-symmetric opponent move/stop/basic-attack channels, and mapped script-cast `CastAbilityBySlot` command execution for supported enemy champions
   - largest remaining gap: world ownership still lacks terrain-aware pathfinding/collision and combat-coupled macro lifecycle transitions (objective damage, structure destruction, economy/xp ownership)
-- Determinism And Replay Guarantees (`20%` weight): `74% / 26%`
-  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, per-tick stable-sequence controller request execution, data-owned fixed tick delay for controller command application, and deterministic actor-id keyed ingress routing
+- Determinism And Replay Guarantees (`20%` weight): `75% / 25%`
+  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, per-tick stable-sequence controller request execution, data-owned fixed tick delay for controller command application, deterministic actor-id keyed ingress routing, and manual-control suppression of autonomous enemy script cadence
   - largest remaining gap: no replay checksum verifier and no full-match deterministic replay contract
-- Calibration And Correctness (`20%` weight): `64% / 36%`
-  - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, world/script registration guardrails, explicit required-defaults regression coverage, startup preflight idempotence validation, world clamping/ecology scaffold regression coverage, runtime/world lifecycle regressions for minion/objective transitions, controller-harness legality/parity regression coverage, deterministic ingress/movement command regressions, fixed-delay/manual-mode harness regressions, and new actor-id ingress regressions (`RejectedControlledActorNotFound`, opponent move/unsupported-channel handling)
+- Calibration And Correctness (`20%` weight): `65% / 35%`
+  - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, world/script registration guardrails, explicit required-defaults regression coverage, startup preflight idempotence validation, world clamping/ecology scaffold regression coverage, runtime/world lifecycle regressions for minion/objective transitions, controller-harness legality/parity regression coverage, deterministic ingress/movement command regressions, fixed-delay/manual-mode harness regressions, actor-id ingress regressions (`RejectedControlledActorNotFound`), and new enemy manual script-cast channel regressions (autonomous script suppression, mapped cast acceptance, cooldown rejection)
   - largest remaining gap: no golden interaction harness/property-suite for full-system invariants
 - Performance Envelope (`15%` weight): `47% / 53%`
   - what is done: broad parallelization and improved runtime diagnostics
@@ -349,10 +349,10 @@ Phase-level status:
 - startup preflight now surfaces typed required-defaults failures before run dispatch, but the runtime still uses process-fatal accessors for strict invariants in binary mode
 - current scan: `0` non-test `expect(...)` and `0` non-test `panic!` callsites under `Simulation/src`
 - controlled-champion script registry is still static and low-coverage (`Vladimir`, `Sona`) relative to full roster requirements
-- controller ingress now includes fixed-delay deterministic execution, data-owned vision radius, and partial actor-symmetric move/stop channels, but opponent cast/basic-attack/item channels, fog-aware legality, and richer buffering/drop semantics still remain
+- controller ingress now includes fixed-delay deterministic execution, data-owned vision radius, partial actor-symmetric move/stop/basic-attack channels, and mapped enemy script-cast channels, but opponent item-active channels, non-script cast channels, fog-aware legality, and richer buffering/drop semantics still remain
 
 ## Immediate Next Work (Execution-Ready)
-1. Expand partial actor-symmetric ingress (currently opponent move/stop) to full opponent action channels (cast/basic-attack/item), while preserving legality/status parity.
+1. Expand partial actor-symmetric ingress (currently opponent move/stop/basic-attack plus mapped script-cast channels) to full opponent action channels (item actives and non-script cast families), while preserving legality/status parity.
 2. Couple non-champion lifecycle channels to combat outcomes (objective defeat events, structure state transitions, and respawn ownership hooks).
 3. Expand world-owner movement from enemy-only updates to full command/path channels with terrain-aware routing.
 4. Expand event taxonomy to include non-combat match events (spawn/objective/economy/vision).

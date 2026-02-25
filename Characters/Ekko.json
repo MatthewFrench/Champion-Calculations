@@ -286,7 +286,12 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "dash_on_cast_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "empowered_attack_window_seconds": 3.0,
+        "max_empowered_attacks": 1,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Direction.",

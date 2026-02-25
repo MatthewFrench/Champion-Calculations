@@ -62,7 +62,11 @@
       "execution": {
         "cast_windup_seconds": 0,
         "projectile_speed": 0,
-        "effect_hitbox_radius": 0
+        "effect_hitbox_radius": 0,
+        "resolution_timing": "<use value from Simulation/data/execution_semantics_vocabulary.json>",
+        "target_required": false,
+        "max_empowered_attacks": 1,
+        "cancels_if_target_invalid_before_resolution": true
       }
     },
     "basic_ability_2": {
@@ -126,6 +130,8 @@
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
     "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    ,
+    "execution_semantics_vocabulary": "Use enum-like values from Simulation/data/execution_semantics_vocabulary.json for execution.resolution_timing."
   },
   "simulation": {
     "status": "data_only_unscripted",

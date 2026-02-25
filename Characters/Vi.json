@@ -270,7 +270,14 @@
       },
       "execution": {
         "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 600.0
+        "effect_hitbox_radius": 600.0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 6.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",

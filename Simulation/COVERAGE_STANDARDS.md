@@ -96,6 +96,7 @@ Data metadata requirements:
 - For multi-stage same-slot abilities (for example stage-1 dash plus stage-2 recast skillshot), document stage windows and gating semantics explicitly and track deferred runtime follow-up when stage identity is not first-class in runtime execution.
 - For attack-cadence-coupled abilities, model execution semantics explicitly in `abilities.<ability_key>.execution` using stable keys when source-verified (for example `resolution_timing`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`, `target_required`) so future runtime consumption is deterministic.
 - For attack-cadence-coupled abilities with two-phase behavior (for example cast-time self-buff then next-hit resolution), use semantically explicit `resolution_timing` values that describe both phases (for example `on_cast_for_self_buff_then_on_empowered_basic_attack_hit`) instead of flattening to generic `on_cast`.
+- `execution.resolution_timing` must use the enum-like canonical vocabulary in `Simulation/data/execution_semantics_vocabulary.json` (do not introduce ad-hoc timing strings without updating that vocabulary file in the same change).
 - For control-triggered effects, encode the full trigger set from source text (for example include both immobilize and ground triggers when both are listed).
 - If an item effect depends on a shared cross-item system rule (for example support-income diminishing-gold logic), preserve conservative confidence until that shared rule is encoded explicitly and track the dependency in `Simulation/COVERAGE_GAPS.md`.
 - If editing a shared-rule effect on one member of an item family (for example the support-quest upgrade line), review sibling items for rule-schema consistency and track deferred sibling harmonization in `Simulation/COVERAGE_GAPS.md`.
@@ -178,6 +179,7 @@ Data requirements:
 - Structured effects include trigger/cooldown/duration/scaling metadata required by runtime loaders.
 - Active cast effects should explicitly encode cooldown and cast-range metadata when those values are available in source text.
 - If an `on_activate` effect intentionally has no fixed cooldown (for example charge/consume/single-use/round-limited behavior), represent that explicitly in `conditions`/`schema_notes.context_notes` so it is tracked as intentional semantics rather than missing cooldown metadata.
+- If an `on_activate` effect intentionally has no fixed cooldown, also encode `effects_structured[].activation_cadence` with a canonical `model` value from `Simulation/data/execution_semantics_vocabulary.json` (`charge_consumption`, `consumable_single_use`, `single_use_transform`, or `round_limited_uses`).
 - If one active ability is represented by multiple `effects_structured` branches, shared active cooldown metadata should be encoded consistently across those branches.
 - Missing active cooldown/cast-range metadata (when source text provides those values) is a blocking data-quality failure.
 - Redirect-backed pseudo-items should include dual provenance in `sources` (redirect page + canonical parent gameplay/champion page) so behavior interpretation remains auditable.

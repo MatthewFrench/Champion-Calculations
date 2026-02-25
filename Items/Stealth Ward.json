@@ -27,6 +27,12 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
+      "activation_cadence": {
+        "model": "charge_consumption",
+        "fixed_cooldown_seconds": null,
+        "charges_consumed_per_use": 1,
+        "recharge_model": "time_based_charges"
+      },
       "trigger": "on_activate",
       "applies_to": "target_location",
       "conditions": [
@@ -152,7 +158,8 @@
     "context_notes": [
       "Execution model: Stealth Ward is a targeted trinket placement action (600 range) that consumes a charge and creates a ward with duration scaling by average champion level (90 to 120 seconds).",
       "Visibility semantics: placed Stealth/Totem wards are briefly visible before entering stealth; the shared map limit is three active Totem/Stealth wards per player.",
-      "Charge cadence: recharge scales from 210 to 90 seconds by average champion level and is affected by item-haste trinket cooldown behavior."
+      "Charge cadence: recharge scales from 210 to 90 seconds by average champion level and is affected by item-haste trinket cooldown behavior.",
+      "Wave 120 (2026-02-25): `on_activate` entries with no fixed cooldown now use explicit `activation_cadence` charge-consumption schema."
     ]
   },
   "sources": [

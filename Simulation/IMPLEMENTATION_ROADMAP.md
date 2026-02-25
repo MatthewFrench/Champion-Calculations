@@ -1211,6 +1211,27 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - opponent manual movement commands execute through the same queued deterministic ingress path.
   - unsupported or invalid actor requests return explicit typed statuses.
 
+59. `DONE` Expand manual opponent ingress to basic-attack and mapped script-cast channels.
+- Scope:
+  - extend opponent manual-control command surface to include:
+    - `StartBasicAttack` target ownership channels
+    - mapped script-backed `CastAbilityBySlot` execution channels for supported enemy champions
+  - add explicit command-channel lifecycle behavior:
+    - manual-control opponents suppress autonomous script cadence
+    - manual cast commands route through shared script-event resolver with cooldown/range semantics
+  - add enemy cast-channel legality/readiness projections in harness runtime state:
+    - script-event cooldown projection into `ability_ready_at_seconds_by_id`
+    - mapped cast-range projection into `ability_cast_range_by_id`
+  - add regressions for:
+    - manual-control script-cadence suppression without cast commands
+    - mapped script-cast acceptance + damage execution
+    - mapped script-cast cooldown rejection after successful cast
+    (`src/tests/engine_tests.rs`)
+- Success criteria:
+  - opponent manual-control commands own basic-attack and mapped script-cast execution through deterministic ingress.
+  - autonomous enemy script cadence does not bypass controller ownership once manual-control mode is enabled.
+  - mapped cast channels report explicit legality statuses instead of silently no-oping.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -1220,7 +1241,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `IN_PROGRESS` Item 4 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
-- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; partial actor-symmetric move/stop ingress landed; runtime-wide target-selection and full opponent action-channel integration pending)
+- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; partial actor-symmetric move/stop/basic-attack + mapped script-cast ingress landed; runtime-wide target-selection and full opponent item/non-script cast channel integration pending)
 - `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
 - `DONE` Item 14 (legacy mastery system removed; rune-page legality is strict and enforced)
 - `DONE` Item 38 (audit completed; phased architecture migration and acceptance criteria documented)
@@ -1242,6 +1263,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 56 (research-backed deterministic request/fast-forward model documented and linked)
 - `DONE` Item 57 (data-owned controller vision + fixed tick-delay ingress semantics landed)
 - `DONE` Item 58 (partial actor-symmetric ingress with opponent move/stop command channels landed)
+- `DONE` Item 59 (manual opponent basic-attack + mapped script-cast ingress channels landed)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

@@ -2,6 +2,20 @@ use super::super::*;
 
 impl ControlledChampionCombatSimulation {
     pub(in crate::engine) fn resolve_enemy_auto_attack_start_event(&mut self, idx: usize) {
+        let Some(enemy_actor_id) = self
+            .enemy_state
+            .get(idx)
+            .map(|state| state.enemy.id.clone())
+        else {
+            return;
+        };
+        if self.enemy_actor_manual_control_mode_enabled(&enemy_actor_id)
+            && self.enemy_basic_attack_target_actor_id(&enemy_actor_id)
+                != Some(self.controlled_champion_world_actor_id.as_str())
+        {
+            self.schedule_next_attack(idx);
+            return;
+        }
         if !self.enemy_can_take_actions(idx) || !self.enemy_in_attack_range(idx) {
             self.schedule_next_attack(idx);
             return;

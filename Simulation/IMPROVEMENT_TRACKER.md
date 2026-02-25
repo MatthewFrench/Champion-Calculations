@@ -1,6 +1,30 @@
 # Improvement Tracker
 
 ## Done
+- Landed manual-opponent ingress expansion for basic-attack and mapped script-cast channels:
+  - expanded actor-symmetric opponent command support in:
+    - `src/engine/controlled_champion_controller_channels.rs`
+    - supported opponent manual channels now include `MoveToPosition`, `StartBasicAttack`, `StopCurrentAction`, and mapped script-backed `CastAbilityBySlot`.
+  - added mapped script-cast ability routing helpers in:
+    - `src/scripts/champions/champion_script_event_channels.rs`
+    - `champion_script_event_for_ability_id(...)`
+    - `champion_script_event_cast_range(...)`
+  - extended script export surface in:
+    - `src/scripts/champions.rs`
+  - wired manual-control script-cadence suppression in:
+    - `src/engine/event_resolution/combat_event_champion_script_dispatch_resolution.rs`
+    - autonomous enemy script events now skip for manual-control enemies; manual cast commands call the same resolver through a dedicated override path.
+  - added enemy script-epoch read owner query in:
+    - `src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`
+  - added regression coverage:
+    - `enemy_manual_control_disables_autonomous_script_casts_without_manual_cast_command`
+    - `enemy_actor_script_cast_request_accepts_supported_slot_and_applies_damage`
+    - `enemy_actor_script_cast_request_reports_cooldown_after_successful_cast`
+    (`src/tests/engine_tests.rs`)
+  - adjusted attack-intent legality semantics:
+    - `StartBasicAttack` validation now treats attack targeting as command intent (cooldown enforced by runtime attack scheduler), while preserving visibility/range legality checks.
+    - file: `src/champion_control_harness/champion_control_action_validation_channels.rs`
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Landed partial actor-symmetric harness ingress with opponent move/stop command channels:
   - extended actor-id keyed ingress in:
     - `src/engine/controlled_champion_controller_channels.rs`
@@ -378,6 +402,25 @@
 - Completed data-first item active-cooldown completeness wave 115 (`Ravenous Hydra`):
   - backfilled page-verified `10s` cooldown on `ravenous_crescent_active_physical_damage`
   - refreshed source usage/context notes and normalized review timestamp to `2026-02-24`
+- Completed data-first champion execution-semantics wave 116 (`Camille` `Precision Protocol`, `Ekko` `Phase Dive`):
+  - encoded canonical `resolution_timing` and companion attack-cadence semantic keys for cast-prime versus empowered-hit behavior
+  - recorded page-level tracker wave scope for both champions
+- Completed data-first champion execution-semantics wave 117 (`Rengar` `Savagery`, `XinZhao` `Three Talon Strike`):
+  - encoded canonical attack-cadence semantic keys for empowered-hit and multi-hit sequence timing behavior
+  - added page-level source provenance for `Three Talon Strike` and recorded tracker wave scope for both champions
+- Completed data-first champion execution-semantics wave 118 (`Yorick` `Last Rites`, `Trundle` `Chomp`):
+  - encoded canonical attack-cadence semantic keys for empowered-hit timing and edge-condition resolution windows
+  - recorded page-level tracker wave scope for both champions
+- Completed data-first champion execution-semantics wave 119 (`Volibear` `Frenzied Maul`, `Vi` `Relentless Force`):
+  - encoded canonical attack-cadence semantic keys for target-required strike timing and charge-primed empowered-hit behavior
+  - recorded page-level tracker wave scope for both champions
+- Completed data-first champion effect-level truncation normalization wave 120 (`XinZhao` `Wind Becomes Lightning`, `Fiora` `Riposte`):
+  - repaired all discovered effect-level context-note timing fragments (`5` entries -> `0`) with page-backed timing semantics
+  - added page-level template provenance for both touched abilities and recorded tracker wave scope
+  - expanded no-regression truncation audits to include `effects[*].context_notes` in addition to ability-level `context_notes`
+- Completed data-first item activation-cadence schema wave 120 (item pass):
+  - added reusable `activation_cadence` metadata for all currently tracked no-fixed-cooldown `on_activate` effects (`11/11` across `10` files) using canonical models
+  - standardized model values (`charge_consumption`, `consumable_single_use`, `single_use_transform`, `round_limited_uses`) and synced supporting context notes/documentation
 - Completed data-first champion fidelity verification wave 75:
   - manually reviewed and normalized execution-semantics notes across `3` champions (`Teemo`, `Viego`, `Zyra`)
   - added page-level champion ability source provenance to all three touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
