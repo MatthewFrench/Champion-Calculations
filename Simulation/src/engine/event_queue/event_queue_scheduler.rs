@@ -152,6 +152,53 @@ impl EventQueueScheduler {
         entries
     }
 
+    pub(in crate::engine) fn queued_event_count(&self) -> usize {
+        self.heap.len()
+    }
+
+    pub(in crate::engine) fn deterministic_replay_checksum(&self) -> u64 {
+        fn mix(checksum: &mut u64, value: u64) {
+            *checksum ^= value;
+            *checksum = checksum.wrapping_mul(0x1000_0000_01B3);
+            *checksum ^= *checksum >> 31;
+        }
+
+        fn mix_i32(checksum: &mut u64, value: i32) {
+            mix(checksum, value as u32 as u64);
+        }
+
+        fn mix_f64(checksum: &mut u64, value: f64) {
+            mix(checksum, value.to_bits());
+        }
+
+        let mut sorted = self.heap.iter().cloned().collect::<Vec<_>>();
+        sorted.sort_by(|left, right| {
+            left.time
+                .partial_cmp(&right.time)
+                .unwrap_or(Ordering::Equal)
+                .then_with(|| left.priority.cmp(&right.priority))
+                .then_with(|| left.seq.cmp(&right.seq))
+        });
+
+        let mut checksum = 0xcbf2_9ce4_8422_2325u64;
+        mix(&mut checksum, self.counter);
+        mix(&mut checksum, sorted.len() as u64);
+        for queued in sorted {
+            mix_f64(&mut checksum, queued.time);
+            mix_i32(&mut checksum, queued.priority);
+            mix(&mut checksum, queued.seq);
+            match queued.recurring {
+                Some(interval_seconds) => {
+                    mix(&mut checksum, 1);
+                    mix_f64(&mut checksum, interval_seconds);
+                }
+                None => mix(&mut checksum, 0),
+            }
+            mix(&mut checksum, queued.kind.deterministic_signature());
+        }
+        checksum
+    }
+
     fn push_event(&mut self, mut queued_event: QueuedEvent) {
         self.counter = self.counter.wrapping_add(1);
         queued_event.seq = self.counter;

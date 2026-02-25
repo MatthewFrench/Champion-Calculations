@@ -163,13 +163,21 @@
       },
       "execution": {
         "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 2000.0
+        "effect_hitbox_radius": 2000.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 2000.",
-        "Source notes (summary): Thundering Smash's bonus damage cannot critically strike; the base damage of the attack can, however."
+        "Source notes (summary): Thundering Smash's bonus damage cannot critically strike; the base damage of the attack can, however.",
+        "Manual review (2026-02-25): Thundering Smash is a two-phase cast: cast-time self-state (movement/ghosted) first, then pounce damage and stun resolve on the first empowered basic-attack hit."
       ]
     },
     "basic_ability_2": {
@@ -408,6 +416,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Frenzied Maul wound-state branch and strike-resolution timing"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Volibear/Thundering_Smash",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Thundering Smash cast-state timing, empowered-hit contact, and stun resolution semantics"
     }
   ],
   "notes": [

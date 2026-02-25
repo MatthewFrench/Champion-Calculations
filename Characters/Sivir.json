@@ -255,14 +255,23 @@
       "execution": {
         "cast_windup_seconds": 0.0,
         "projectile_speed": 1750.0,
-        "effect_hitbox_radius": 500.0
+        "effect_hitbox_radius": 500.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 0,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source speed: 1750 / 1000.",
         "Source effectRadius: 500.",
-        "Source notes (summary): Ricochet-enhanced basic attacks can bounce from structures onto secondary targets but not from nearby units onto structures."
+        "Source notes (summary): Ricochet-enhanced basic attacks can bounce from structures onto secondary targets but not from nearby units onto structures.",
+        "Manual review (2026-02-25): Ricochet is a cast-time self-buff with attack-cadence-coupled bounce resolution on each empowered basic-attack hit during the 4-second window.",
+        "Manual review (2026-02-25): `max_empowered_attacks` uses temporary `0` sentinel fallback for duration-limited variable-hit behavior; follow-up should replace with an explicit unbounded-within-window semantic model."
       ]
     },
     "basic_ability_3": {
@@ -377,6 +386,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Sivir",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Sivir/Ricochet",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Ricochet cast-buff cadence, bounce branch resolution, and attack-reset timing"
     }
   ],
   "notes": [

@@ -253,7 +253,14 @@
       "execution": {
         "cast_windup_seconds": 0.0,
         "projectile_speed": 1500.0,
-        "effect_hitbox_radius": 325.0
+        "effect_hitbox_radius": 325.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 6.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
@@ -261,7 +268,8 @@
         "Source speed: 1500.",
         "Source effectRadius: 325.",
         "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
-        "Manual verification (2026-02-24): Pick a Card cycles selectable cards at 0.5-second cadence, and recast locks the next empowered basic attack (0.25-second cast behavior) into card-specific resource, area-slow, or stun branch resolution."
+        "Manual verification (2026-02-24): Pick a Card cycles selectable cards at 0.5-second cadence, and recast locks the next empowered basic attack (0.25-second cast behavior) into card-specific resource, area-slow, or stun branch resolution.",
+        "Manual review (2026-02-25): Pick a Card is two-phase: cast/recast establishes card state, while combat payload resolves on the selected empowered basic-attack hit."
       ]
     },
     "basic_ability_3": {

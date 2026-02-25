@@ -106,6 +106,7 @@ Current scope:
 - opponent manual-control cast channels now support mapped script-backed `CastAbilityBySlot` execution for supported enemy champions, including cooldown/range legality reporting through the same harness action-status path
 - opponent manual-control item-active channels now support mapped `UseItemActive` execution for `stasis_item` and `emergency_shield_item`, including explicit readiness/cooldown legality statuses
 - manual-control opponents now suppress autonomous script cadence so controller requests are the sole command ingress
+- deterministic replay signatures (final-state, tick-state, queue checksums plus tick/event counters) are now emitted in controlled-champion and fixed-loadout trace/report artifacts for replay-audit workflows
 - unit tests for visibility, fairness parity, legality responses, and policy ordering
 
 ## Integration Target State
@@ -136,6 +137,7 @@ Required coverage for harness evolution:
 - command/path ownership is integrated for deterministic move targets, but pathfinding/collision/terrain routing are not yet integrated
 - objective/structure/economy channels are not yet wired into perspective visibility and action legality
 - only fixed delay ingestion is modeled; richer buffering/overwrite/packet-drop network semantics are still simplified versus live game
+- replay signatures are currently diagnostics-only; hard-fail replay consistency gates are not yet enforced in CI/runtime entrypoints
 
 ## Ownership Boundaries
 - Harness contract and legality channels:

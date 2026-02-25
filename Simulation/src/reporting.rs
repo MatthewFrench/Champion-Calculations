@@ -15,7 +15,7 @@ use super::{
     simulation_dir, to_norm_key,
 };
 
-const CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION: u32 = 2;
+const CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION: u32 = 3;
 
 #[cfg(test)]
 pub(super) fn default_report_path_for_champion(champion_name: &str) -> PathBuf {

@@ -159,6 +159,15 @@ pub(crate) struct EnemyDerivedCombatStats {
     pub burst_true_damage: f64,
 }
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub(crate) struct SimulationDeterminismSignature {
+    pub(crate) final_state_checksum: u64,
+    pub(crate) tick_state_checksum: u64,
+    pub(crate) queue_checksum: u64,
+    pub(crate) ticks_executed: u64,
+    pub(crate) events_processed: u64,
+}
+
 #[derive(Debug, Clone)]
 struct ProjectileBlockZone {
     start: Vec2,
@@ -190,6 +199,7 @@ struct DamageSourceContext {
 }
 
 const CONTROLLED_CHAMPION_WORLD_ACTOR_ID: &str = "controlled_champion";
+const DETERMINISTIC_CHECKSUM_OFFSET_BASIS: u64 = 0xcbf2_9ce4_8422_2325u64;
 
 pub(super) struct ControlledChampionCombatSimulation {
     controlled_champion_base: ChampionBase,
@@ -287,6 +297,10 @@ pub(super) struct ControlledChampionCombatSimulation {
     trace_events: Vec<String>,
     trace_snapshot_interval_seconds: f64,
     trace_next_snapshot_at: f64,
+    determinism_signature_enabled: bool,
+    deterministic_tick_state_checksum: u64,
+    deterministic_tick_count: u64,
+    deterministic_event_count: u64,
 }
 
 impl ControlledChampionCombatSimulation {
@@ -449,6 +463,7 @@ impl ControlledChampionCombatSimulation {
         } else {
             sim.dt
         };
+        let determinism_signature_enabled = sim.collect_rune_proc_telemetry;
         let mut seeded_combat_rng = sim.combat_seed.map(|seed| seed ^ 0xC0B4_7EAF_D15C_A11E);
 
         let mut runner = Self {
@@ -545,6 +560,10 @@ impl ControlledChampionCombatSimulation {
             trace_events: Vec::new(),
             trace_snapshot_interval_seconds: 5.0,
             trace_next_snapshot_at: 0.0,
+            determinism_signature_enabled,
+            deterministic_tick_state_checksum: DETERMINISTIC_CHECKSUM_OFFSET_BASIS,
+            deterministic_tick_count: 0,
+            deterministic_event_count: 0,
         };
         seed_static_world_ecology_anchors(&mut runner.world_state);
         runner.world_state.upsert_actor_position_clamped(

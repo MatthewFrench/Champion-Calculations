@@ -30,6 +30,7 @@ This file is a concise handoff for developers and AI agents.
 - Top-level search orchestration is parallelized for ensemble seeds and portfolio strategies, and strategy-elite/adaptive generation is parallelized with deterministic merge ordering.
 - Report and trace outputs are optimized-build only (baseline comparison path removed).
 - Trace JSON output is schema-versioned and structured for downstream tooling.
+- Controlled-champion and fixed-loadout trace/report artifacts now include deterministic replay signatures (final-state checksum, tick-state checksum, queue checksum, tick/event counters) for reproducibility audits.
 - Report and trace outputs now include rune proc telemetry totals plus source-attribution breakdown (`source_breakdown`), proc attempt/eligible metrics and rates, and damage/healing share metrics.
 - Search-time scoring simulations now run with full rune-proc telemetry collection disabled; dedicated trace/report replay simulations explicitly enable it.
 - Optional `simulation.combat_seed` now enables deterministic combat-variation simulation runs (enemy initialization ordering + initial auto-attack jitter).
@@ -119,7 +120,8 @@ This file is a concise handoff for developers and AI agents.
   - `queue_actor_action_request(...)` supports controlled champion and opponent actor command ingress.
   - opponent movement `MoveToPosition`, basic attack `StartBasicAttack`, and stop `StopCurrentAction` are routed through deterministic queued command channels.
   - mapped script-backed opponent `CastAbilityBySlot` channels now execute through manual command ingress with cooldown/range legality reporting.
-  - mapped opponent `UseItemActive` channels now support `stasis_item` with explicit availability and cooldown legality statuses.
+  - mapped opponent `UseItemActive` channels now support `stasis_item` and `emergency_shield_item` with explicit availability and cooldown legality statuses.
+  - enemy `emergency_shield_item` channels now include runtime shield absorption and heal-over-time ownership for manual command execution.
   - manual-control opponents now suppress autonomous script cadence so command execution flows through controller ingress.
   - enemy movement is now action-locked during stasis/stun windows (`enemy_can_take_actions` gating in movement step).
   - invalid actor IDs return explicit `RejectedControlledActorNotFound`.
@@ -127,11 +129,11 @@ This file is a concise handoff for developers and AI agents.
 
 ## Full-Game Transformation Status (Non-Data)
 - Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `100%` (`DONE`).
-- Weighted completion estimate: `59%` (`IN_PROGRESS`).
+- Weighted completion estimate: `61%` (`IN_PROGRESS`).
 - Bucket snapshot (complete / remaining):
-  - Runtime Systems Completeness (`30%` weight): `59% / 41%`
-  - Determinism And Replay Guarantees (`20%` weight): `76% / 24%`
-  - Calibration And Correctness (`20%` weight): `66% / 34%`
+  - Runtime Systems Completeness (`30%` weight): `61% / 39%`
+  - Determinism And Replay Guarantees (`20%` weight): `80% / 20%`
+  - Calibration And Correctness (`20%` weight): `67% / 33%`
   - Performance Envelope (`15%` weight): `47% / 53%`
   - Renderer-Contract Readiness (`15%` weight): `40% / 60%`
 - Canonical status and gap detail:
@@ -144,11 +146,12 @@ This file is a concise handoff for developers and AI agents.
 ## Current Known Tradeoff
 - Coverage breadth floor is strong, but short-iteration latency is higher than ideal.
 - Required defaults ownership is now strict and preflighted.
+- Deterministic replay signatures are now emitted in trace/report outputs, but deterministic replay enforcement is still audit-only (not yet hard-fail gated in CI/run commands).
 - Remaining realism lift is now concentrated in command/path ownership and macro event coupling (objective/structure/economy/vision), not defaults or crash-surface channels.
-- Controller ingress now includes deterministic fixed delay, data-owned vision radius, actor-symmetric opponent move/stop/basic-attack control, mapped script-cast channels, and mapped `stasis_item` item-active channels, but broader opponent item-actives, non-script cast channels, and richer buffering/drop semantics are still pending.
+- Controller ingress now includes deterministic fixed delay, data-owned vision radius, actor-symmetric opponent move/stop/basic-attack control, mapped script-cast channels, and mapped `stasis_item`/`emergency_shield_item` item-active channels, but broader opponent item-actives, non-script cast channels, and richer buffering/drop semantics are still pending.
 
 ## Highest-Value Next Work (Largest Impact First)
-1. Expand partial actor-symmetric ownership from opponent move/stop/basic-attack plus mapped script-cast and `stasis_item` into full opponent cast/item legality + execution channels (including non-script cast families and broader item-actives).
+1. Expand partial actor-symmetric ownership from opponent move/stop/basic-attack plus mapped script-cast and mapped `stasis_item`/`emergency_shield_item` into full opponent cast/item legality + execution channels (including non-script cast families and broader item-actives).
 2. Couple world lifecycle channels to combat outcomes (objective defeat, structure state transitions, and respawn ownership hooks) under `src/world/*` and engine event-resolution ownership.
 3. Replace mixed movement model with terrain-aware command/path channels (pathfinding, collision, and route replanning ownership).
 4. Expand event taxonomy for macro systems (spawn/objective/economy/vision events) before adding feature logic.
@@ -159,6 +162,7 @@ This file is a concise handoff for developers and AI agents.
 9. Add guardrail tests for:
    - asset coverage guarantee
    - post-coverage time-budget start behavior.
+10. Promote replay signatures from diagnostics to hard-fail determinism gates (paired replay runs + checksum equality assertions) in CI and selected runtime entrypoints.
 
 ## Where To Look First
 - Main orchestration:

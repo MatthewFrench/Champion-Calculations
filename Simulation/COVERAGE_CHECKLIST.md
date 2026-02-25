@@ -26,6 +26,7 @@ Read first:
 - [ ] For non-trivial cast-vs-hit abilities, `execution` includes explicit semantic timing keys when source-verified (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`).
 - [ ] `resolution_timing` values are semantically explicit for two-phase abilities (for example cast-time self-buff plus empowered-hit resolution), not flattened to ambiguous timing labels.
 - [ ] `resolution_timing` values are taken from `Simulation/data/execution_semantics_vocabulary.json` (or the vocabulary file is updated in the same change).
+- [ ] If `max_empowered_attacks = 0` is used as a temporary duration-limited variable-hit sentinel, ability `context_notes` explain the fallback and same-change follow-up is logged in `Simulation/COVERAGE_GAPS.md`.
 - [ ] Non-trivial ability data was manually reviewed for in-game execution semantics (activation requirements, target/range gating, timing/windup, and player-visible resolution behavior).
 - [ ] Full-corpus champion quality audit remains clean after edits (no regressions for active `execution` completeness or non-passive `context_notes` completeness).
 - [ ] For attack-cadence-coupled casts (empowered-hit/reset/timed-hit patterns), both cast gating and hit-resolution timing semantics are explicitly documented in ability notes.
@@ -58,6 +59,7 @@ Read first:
 - [ ] Item `stats` keys use loader-canonical names (for example `magicResist`, `critChance`, not legacy aliases like `magicResistance` or `criticalStrikeChance`).
 - [ ] Structured effects use stable effect identifiers and include trigger, cooldown, duration, and scaling where applicable.
 - [ ] Active cast effects include explicit cooldown and cast-range metadata when these values are present in source text (blocking gate when applicable).
+- [ ] Fixed-cooldown `on_activate` effects include explicit execution fields (`cast_windup_seconds`, `cast_range`, and/or `effect_hitbox_radius`) on each branch where source semantics support them.
 - [ ] Any `on_activate` effect without fixed `cooldown_seconds` is explicitly documented as intentional (charge/consume/single-use/round-limited semantics) in `conditions` and/or `schema_notes.context_notes`.
 - [ ] Any `on_activate` effect without fixed `cooldown_seconds` includes `activation_cadence.model` using canonical values from `Simulation/data/execution_semantics_vocabulary.json`.
 - [ ] If one active maps to multiple `effects_structured` branches, shared active cooldown metadata is encoded consistently on each branch.

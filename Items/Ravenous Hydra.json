@@ -109,6 +109,7 @@
       "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": 10,
+      "effect_hitbox_radius": 450.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemies_in_cone",
@@ -181,7 +182,8 @@
     "context_notes": [
       "Ravenous Hydra is modeled as sustained fighter wave-clear where both passive cleave and active crescent preserve full lifesteal conversion from physical damage dealt.",
       "Cleave damage differs for melee vs ranged (40% vs 20% AD).",
-      "Wave 115 (2026-02-24): Added page-verified 10-second active cooldown metadata for Ravenous Crescent while preserving lifesteal-at-full-effectiveness semantics on active and passive cleave branches."
+      "Wave 115 (2026-02-24): Added page-verified 10-second active cooldown metadata for Ravenous Crescent while preserving lifesteal-at-full-effectiveness semantics on active and passive cleave branches.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution metadata (`effect_hitbox_radius`) for Ravenous Crescent area-hit geometry."
     ]
   },
   "sources": [

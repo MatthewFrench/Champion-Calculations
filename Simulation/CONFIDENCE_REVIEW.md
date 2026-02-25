@@ -40,12 +40,13 @@
   - Uncertainty 2 (deferred code follow-up): `Sylas` slot-E behavior (`Abscond` -> `Abduct`) is a multi-stage same-slot flow; runtime still lacks first-class stage identity and recast-window event modeling.
   - Additional deferred code follow-up: `Vex` `Looming Darkness` uses cast-distance-scaled explosion radius (`200 : 300`), but runtime currently treats execution hitbox radius as a static value.
   - Additional deferred code follow-up: champion data now carries execution-semantic keys for attack-cadence-coupled behavior (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`), but runtime loaders/scripts do not consume these keys yet.
-  - Semantic-key authoring baseline has expanded to `18/682` active abilities (including `Nasus` `Siphoning Strike`, `Garen` `Decisive Strike`, `Jax` `Empower`, `Renekton` `Ruthless Predator`, `MonkeyKing` `Crushing Blow`, `Blitzcrank` `Power Fist`, `Leona` `Shield of Daybreak`, `Vayne` `Tumble`, `Camille` `Precision Protocol`, `Ekko` `Phase Dive`, `Rengar` `Savagery`, `XinZhao` `Three Talon Strike`, `Yorick` `Last Rites`, `Trundle` `Chomp`, `Volibear` `Frenzied Maul`, and `Vi` `Relentless Force`); runtime consumption remains deferred code follow-up.
+  - Semantic-key authoring baseline has expanded to `42/682` active abilities after waves `121-133`, including latest execution-semantic coverage for `Sett` (`Knuckle Down`), `Volibear` (`Thundering Smash`), `TwistedFate` (`Pick a Card`), `Shaco` (`Deceive`), `Zac` (`Stretching Strikes`), `Udyr` (`Wilding Claw`, `Iron Mantle`), and `Sivir` (`Ricochet`); runtime consumption remains deferred code follow-up.
+  - Deferred code follow-up: `Sivir` `Ricochet` currently uses temporary `max_empowered_attacks = 0` sentinel to represent duration-limited variable-hit behavior; loader/runtime support should treat this as unbounded-within-window (or migrate to explicit schema) rather than literal zero attacks.
   - Data-quality no-regression update: truncation audits now include effect-level `effects[*].context_notes`; wave 120 repaired previously discovered fragments on `XinZhao` `Wind Becomes Lightning` and `Fiora` `Riposte`, leaving current effect-level queue at `0/0`.
 - Item data uncertainty follow-up:
   - No open item-structure uncertainty remains in the latest wave for `Dragonheart` or `Twilight's Edge`; keep periodic source-drift checks because page/module text can diverge on distributed Arena items.
   - Active cooldown metadata was backfilled for `Stridebreaker` (`15s`), `Hextech Rocketbelt` (`40s`), and `Redemption` (`90s`); runtime behavior remains deferred where item actives are not yet modeled.
-  - Active cooldown metadata was additionally backfilled for `Ravenous Hydra` (`10s`), and the remaining no-fixed-cooldown `on_activate` queue now has explicit reusable `activation_cadence` schema coverage (`11/11` effects across `10` files).
+  - Fixed-cooldown active execution metadata coverage has been expanded to `22/22` fixed-cooldown `on_activate` effects with explicit execution fields (`cast_windup_seconds`, `cast_range`, and/or `effect_hitbox_radius`), while no-fixed-cooldown cadence schema coverage remains complete (`11/11` effects across `10` files).
 - Rune data quality follow-up:
   - Broad decimal-spacing cleanup is now complete for the previously tracked queue (`0` remaining `x. y` artifacts in `effects_structured.raw`).
   - Rune narrative decimal-spacing cleanup is now complete for touched flat/split rune files (`88` `x. y` artifacts in rune narrative fields -> `0`).
@@ -75,7 +76,7 @@
   - League wiki documents Sylas Hijack as on-target cooldown-gated steal with hijacked cast held temporarily and cast as recast behavior.
   - Source: [Sylas (League Wiki)](https://wiki.leagueoflegends.com/en-us/Sylas)
 
-## Data Research Notes (2026-02-24)
+## Data Research Notes (2026-02-25)
 - Dragonheart immediate backfill:
   - Current page notes publish explicit acquisition-round mapping for immediate backfill (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) via the round-versus-souls tooltip table.
   - Source: [Dragonheart](https://wiki.leagueoflegends.com/en-us/Dragonheart)
@@ -139,6 +140,23 @@
   - Source: [Template:Data_Trundle/Chomp](https://wiki.leagueoflegends.com/en-us/Template:Data_Trundle/Chomp)
   - Source: [Template:Data_Volibear/Frenzied_Maul](https://wiki.leagueoflegends.com/en-us/Template:Data_Volibear/Frenzied_Maul)
   - Source: [Template:Data_Vi/Relentless_Force](https://wiki.leagueoflegends.com/en-us/Template:Data_Vi/Relentless_Force)
+- Champion execution-semantics waves (121-128):
+  - Re-verified and encoded explicit execution-semantic keys for attack-cadence-coupled abilities on `Darius` (`Crippling Strike`), `Shyvana` (`Twin Bite`), `RekSai` (`Queen's Wrath`), `Chogath` (`Vorpal Spikes`), `Skarner` (`Shattered Earth`), `Illaoi` (`Harsh Lesson`), `Draven` (`Spinning Axe`), `Gwen` (`Skip 'n Slash`), `Fizz` (`Seastone Trident`), `Malphite` (`Thunderclap`), `Shen` (`Twilight Assault`), `Gragas` (`Drunken Rage`), `Hecarim` (`Devastating Charge`), `Kassadin` (`Nether Blade`), `Kayle` (`Starfire Spellblade`), and `Viktor` (`Siphon Power`).
+  - Source: [Template:Data_Darius/Crippling_Strike](https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Crippling_Strike)
+  - Source: [Template:Data_Shyvana/Twin_Bite](https://wiki.leagueoflegends.com/en-us/Template:Data_Shyvana/Twin_Bite)
+  - Source: [Template:Data_Rek'Sai/Queen's_Wrath](https://wiki.leagueoflegends.com/en-us/Template:Data_Rek%27Sai/Queen%27s_Wrath)
+  - Source: [Template:Data_Cho'Gath/Vorpal_Spikes](https://wiki.leagueoflegends.com/en-us/Template:Data_Cho%27Gath/Vorpal_Spikes)
+  - Source: [Template:Data_Viktor/Siphon_Power](https://wiki.leagueoflegends.com/en-us/Template:Data_Viktor/Siphon_Power)
+- Champion execution-semantics waves (130-133):
+  - Re-verified and encoded explicit execution-semantic keys for attack-cadence-coupled abilities on `Sett` (`Knuckle Down`), `Volibear` (`Thundering Smash`), `TwistedFate` (`Pick a Card`), `Shaco` (`Deceive`), `Zac` (`Stretching Strikes`), `Udyr` (`Wilding Claw`, `Iron Mantle`), and `Sivir` (`Ricochet`).
+  - Source: [Template:Data_Sett/Knuckle_Down](https://wiki.leagueoflegends.com/en-us/Template:Data_Sett/Knuckle_Down)
+  - Source: [Template:Data_Volibear/Thundering_Smash](https://wiki.leagueoflegends.com/en-us/Template:Data_Volibear/Thundering_Smash)
+  - Source: [Template:Data_Twisted_Fate/Pick_a_Card](https://wiki.leagueoflegends.com/en-us/Template:Data_Twisted_Fate/Pick_a_Card)
+  - Source: [Template:Data_Shaco/Deceive](https://wiki.leagueoflegends.com/en-us/Template:Data_Shaco/Deceive)
+  - Source: [Template:Data_Zac/Stretching_Strikes](https://wiki.leagueoflegends.com/en-us/Template:Data_Zac/Stretching_Strikes)
+  - Source: [Template:Data_Udyr/Wilding_Claw](https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Wilding_Claw)
+  - Source: [Template:Data_Udyr/Iron_Mantle](https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Iron_Mantle)
+  - Source: [Template:Data_Sivir/Ricochet](https://wiki.leagueoflegends.com/en-us/Template:Data_Sivir/Ricochet)
 - Item active cooldown completeness wave (109):
   - Re-verified and encoded explicit active cooldown metadata on `Stridebreaker` (`15s`), `Hextech Rocketbelt` (`40s`), and `Redemption` (`90s`) across all active effect branches in structured data.
   - Source: [Stridebreaker](https://wiki.leagueoflegends.com/en-us/Stridebreaker)
@@ -149,6 +167,12 @@
   - Source: [Ravenous Hydra](https://wiki.leagueoflegends.com/en-us/Ravenous_Hydra)
 - Item activation-cadence schema wave (120):
   - Added explicit reusable `activation_cadence` models on all currently tracked no-fixed-cooldown `on_activate` effects (`11/11` across `10` files), separating charge/consumable/single-use/round-limited cadence from fixed-cooldown semantics.
+- Item active execution-field completeness wave (129):
+  - Backfilled explicit fixed-cooldown active execution fields across cooldown-bearing `on_activate` effects to full branch coverage (`22/22`) using source-verified timing/range/radius semantics.
+  - Source: [Hextech Gunblade](https://wiki.leagueoflegends.com/en-us/Hextech_Gunblade)
+  - Source: [Mikael's Blessing](https://wiki.leagueoflegends.com/en-us/Mikael%27s_Blessing)
+  - Source: [Prowler's Claw](https://wiki.leagueoflegends.com/en-us/Prowler%27s_Claw)
+  - Source: [Redemption](https://wiki.leagueoflegends.com/en-us/Redemption)
 - Champion effect-level truncation normalization wave (120):
   - Re-verified and repaired effect-level timing-note truncation on `XinZhao` `Wind Becomes Lightning` and `Fiora` `Riposte`, and expanded no-regression audits to include `effects[*].context_notes`.
   - Source: [Template:Data_Xin_Zhao/Wind_Becomes_Lightning](https://wiki.leagueoflegends.com/en-us/Template:Data_Xin_Zhao/Wind_Becomes_Lightning)

@@ -1,9 +1,19 @@
 use anyhow::Result;
-use serde_json::json;
+use serde_json::{Value, json};
 use std::fs;
 use std::path::{Path, PathBuf};
 
 use super::*;
+
+fn deterministic_signature_json(signature: SimulationDeterminismSignature) -> Value {
+    json!({
+        "final_state_checksum_hex": format!("{:016x}", signature.final_state_checksum),
+        "tick_state_checksum_hex": format!("{:016x}", signature.tick_state_checksum),
+        "queue_checksum_hex": format!("{:016x}", signature.queue_checksum),
+        "ticks_executed": signature.ticks_executed,
+        "events_processed": signature.events_processed,
+    })
+}
 
 pub(in crate::scenario_runner) struct FixedLoadoutReportWriteContext<'a> {
     pub(in crate::scenario_runner) scenario_path: &'a Path,
@@ -89,6 +99,7 @@ pub(in crate::scenario_runner) fn write_fixed_loadout_reports(
     while trace_sim.step(1) {}
     let trace_events = trace_sim.trace_events();
     let rune_proc_telemetry = trace_sim.controlled_champion_rune_proc_telemetry();
+    let trace_determinism = trace_sim.deterministic_replay_signature();
     let mut trace_markdown = String::new();
     trace_markdown.push_str("# Controlled Champion Fixed Loadout Trace\n\n");
     trace_markdown.push_str("## Rune Proc Telemetry\n");
@@ -110,6 +121,7 @@ pub(in crate::scenario_runner) fn write_fixed_loadout_reports(
     let trace_json = json!({
         "schema_version": trace_json_schema_version,
         "event_encoding": "structured",
+        "determinism": deterministic_signature_json(trace_determinism),
         "rune_proc_telemetry": rune_proc_telemetry_json(
             &rune_proc_telemetry,
             fixed_outcome.damage_dealt,
@@ -167,6 +179,14 @@ pub(in crate::scenario_runner) fn write_fixed_loadout_reports(
         format_repo_relative_path(&trace_markdown_path),
         format_repo_relative_path(&trace_json_path),
     );
+    markdown_report.push_str(&format!(
+        "\n## Deterministic Replay Signature\n- Tick state checksum: `{:016x}`\n- Final state checksum: `{:016x}`\n- Queue checksum: `{:016x}`\n- Ticks executed: `{}`\n- Events processed: `{}`\n",
+        trace_determinism.tick_state_checksum,
+        trace_determinism.final_state_checksum,
+        trace_determinism.queue_checksum,
+        trace_determinism.ticks_executed,
+        trace_determinism.events_processed,
+    ));
     markdown_report.push_str("\n## Rune Proc Telemetry\n");
     if rune_proc_telemetry.is_empty() {
         markdown_report.push_str("- No rune procs were recorded.\n");
@@ -269,6 +289,7 @@ pub(in crate::scenario_runner) fn write_fixed_loadout_reports(
             fixed_outcome.damage_dealt,
             fixed_outcome.healing_done,
         ),
+        "determinism": deterministic_signature_json(trace_determinism),
         "notes": [
             "No search stage is run in controlled_champion_fixed_loadout mode.",
             "This report is intended for direct loadout-to-loadout comparisons."

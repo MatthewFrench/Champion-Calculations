@@ -1,6 +1,16 @@
 use super::controlled_champion_result_build_analysis::ControlledChampionBuildAnalysisOutput;
 use super::*;
-use serde_json::json;
+use serde_json::{Value, json};
+
+fn deterministic_signature_json(signature: SimulationDeterminismSignature) -> Value {
+    json!({
+        "final_state_checksum_hex": format!("{:016x}", signature.final_state_checksum),
+        "tick_state_checksum_hex": format!("{:016x}", signature.tick_state_checksum),
+        "queue_checksum_hex": format!("{:016x}", signature.queue_checksum),
+        "ticks_executed": signature.ticks_executed,
+        "events_processed": signature.events_processed,
+    })
+}
 
 pub(super) struct ControlledChampionResultArtifactWritingContext<'a> {
     pub(super) scenario_path: &'a Path,
@@ -170,6 +180,7 @@ pub(super) fn write_controlled_champion_result_artifacts(
     while best_trace_sim.step(1) {}
     let best_trace = best_trace_sim.trace_events().to_vec();
     let best_rune_proc_telemetry = best_trace_sim.controlled_champion_rune_proc_telemetry();
+    let best_trace_determinism = best_trace_sim.deterministic_replay_signature();
 
     let mut trace_markdown = String::new();
     trace_markdown.push_str(&format!("# {} Event Trace\n\n", controlled_champion_name));
@@ -210,6 +221,7 @@ pub(super) fn write_controlled_champion_result_artifacts(
     let trace_json = json!({
         "schema_version": CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION,
         "event_encoding": "structured",
+        "determinism": deterministic_signature_json(best_trace_determinism),
         "rune_proc_telemetry": rune_proc_telemetry_json(
             &best_rune_proc_telemetry,
             controlled_champion_best_outcome.damage_dealt,
@@ -237,6 +249,7 @@ pub(super) fn write_controlled_champion_result_artifacts(
         best_score: controlled_champion_best_score,
         best_outcome: &controlled_champion_best_outcome,
         best_rune_proc_telemetry: &best_rune_proc_telemetry,
+        best_trace_determinism,
         best_score_breakdown,
         enemy_builds,
         enemy_derived_combat_stats,

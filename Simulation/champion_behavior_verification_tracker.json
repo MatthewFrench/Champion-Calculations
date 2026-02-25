@@ -2768,5 +2768,105 @@
         ]
       }
     ]
+  },
+  "manual_behavior_verification_wave_130": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Sett",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Knuckle Down cast-state movement buff plus two-hit empowered basic-attack payload timing and attack-reset sequencing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Sett/Knuckle_Down"
+        ]
+      },
+      {
+        "key": "Volibear",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Thundering Smash cast-time movement state with first-hit empowered pounce damage/stun resolution timing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Volibear/Thundering_Smash"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_131": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "TwistedFate",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Pick a Card two-phase card-selection flow and recast-driven empowered basic-attack branch resolution timing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Twisted_Fate/Pick_a_Card"
+        ]
+      },
+      {
+        "key": "Shaco",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Deceive cast-time blink/invisibility state and post-stealth empowered-hit critical branch timing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Shaco/Deceive"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_132": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Zac",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Stretching Strikes first-hit projectile/tether timing and second-hit empowered basic-attack displacement branch sequencing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Zac/Stretching_Strikes"
+        ]
+      },
+      {
+        "key": "Udyr",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Wilding Claw stance-cast self-state and two-hit empowered-attack payload cadence with awakened branch overlap",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Wilding_Claw"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_133": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Udyr",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Iron Mantle immediate shield-state cast resolution plus empowered-hit healing/life-steal cadence semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Iron_Mantle"
+        ]
+      },
+      {
+        "key": "Sivir",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Ricochet cast-buff timing with duration-bounded variable-count empowered-hit bounce resolution and attack-reset behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Sivir/Ricochet"
+        ]
+      }
+    ]
   }
 }

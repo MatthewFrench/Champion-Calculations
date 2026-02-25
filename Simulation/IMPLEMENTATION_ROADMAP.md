@@ -1251,6 +1251,52 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - opponent manual-control supports explicit `stasis_item` activation with deterministic legality/cooldown statuses.
   - enemy stasis windows correctly block incoming damage and movement actions.
 
+61. `DONE` Expand mapped opponent item-active ingress with `emergency_shield_item` runtime channels.
+- Scope:
+  - extend opponent manual-control `UseItemActive` support for `emergency_shield_item` through deterministic queued ingress.
+  - move enemy defensive-item capability detection behind script-owned item hooks:
+    - `src/scripts/items/hooks.rs`
+    - new runtime-item-name capability projection helper consumed by engine enemy initialization.
+  - add enemy emergency-shield ownership channels:
+    - availability/readiness/activation in `src/engine/actor_state/enemy_runtime_state/enemy_item_active_channels.rs`
+    - runtime shield absorb and heal-over-time state ownership in enemy runtime state.
+  - project enemy `emergency_shield_item` readiness/cast-range through harness runtime state for explicit legality/status responses.
+  - integrate enemy emergency-shield correctness into shared runtime channels:
+    - absorb incoming damage while shield remains (`src/engine/event_resolution/incoming_damage_resolution.rs`)
+    - apply emergency heal-over-time in enemy regeneration ownership (`src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`)
+    - include enemy emergency status projection in trace snapshot channels.
+  - add regressions for:
+    - unavailable enemy emergency-shield item rejection
+    - emergency-shield activation damage absorb behavior
+    - emergency-shield cooldown rejection after activation
+    - emergency-shield heal-over-time runtime behavior
+    (`src/tests/engine_tests.rs`)
+- Success criteria:
+  - opponent manual-control supports explicit `emergency_shield_item` activation with deterministic legality/cooldown statuses.
+  - enemy emergency-shield runtime behavior (shield absorb + heal-over-time) is owner-channeled and regression-covered.
+
+62. `DONE` Add deterministic replay signatures to trace/report artifacts.
+- Scope:
+  - add deterministic replay signature ownership channels on combat runtime:
+    - per-run final-state checksum
+    - per-tick rolled checksum
+    - event-queue checksum
+    - executed tick/event counters
+  - wire signatures into controlled-champion and fixed-loadout artifact outputs:
+    - controlled champion trace JSON
+    - fixed-loadout trace JSON
+    - fixed-loadout report JSON
+    - controlled-champion run report JSON (`best_trace_determinism`)
+  - keep runtime/search entrypoints stable while adding deterministic metadata behind owner methods:
+    - `ControlledChampionCombatSimulation::deterministic_replay_signature()`
+  - add deterministic replay regressions:
+    - same seed/input -> same signature
+    - seed change -> signature change
+  - update schema-version contracts and tests for new determinism fields.
+- Success criteria:
+  - trace/report artifacts expose deterministic replay signatures for downstream replay verification.
+  - deterministic signatures are regression-covered and schema-versioned.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -1260,7 +1306,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `IN_PROGRESS` Item 4 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
-- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; partial actor-symmetric move/stop/basic-attack + mapped script-cast + `stasis_item` ingress landed; runtime-wide target-selection and full opponent item/non-script cast channel integration pending)
+- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; partial actor-symmetric move/stop/basic-attack + mapped script-cast + mapped `stasis_item`/`emergency_shield_item` ingress landed; runtime-wide target-selection and full opponent item/non-script cast channel integration pending)
 - `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
 - `DONE` Item 14 (legacy mastery system removed; rune-page legality is strict and enforced)
 - `DONE` Item 38 (audit completed; phased architecture migration and acceptance criteria documented)
@@ -1284,6 +1330,8 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 58 (partial actor-symmetric ingress with opponent move/stop command channels landed)
 - `DONE` Item 59 (manual opponent basic-attack + mapped script-cast ingress channels landed)
 - `DONE` Item 60 (manual opponent `stasis_item` ingress + stasis lock correctness landed)
+- `DONE` Item 61 (manual opponent `emergency_shield_item` ingress + runtime shield/heal correctness landed)
+- `DONE` Item 62 (trace/report deterministic replay signatures landed with schema/tests)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

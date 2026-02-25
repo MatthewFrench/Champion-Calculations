@@ -176,13 +176,20 @@
       },
       "execution": {
         "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 450.0
+        "effect_hitbox_radius": 450.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 2,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 450.",
-        "Source notes (summary): Deals spell damage to the primary target and applies area damage on the lightning strikes."
+        "Source notes (summary): Deals spell damage to the primary target and applies area damage on the lightning strikes.",
+        "Manual review (2026-02-25): Wilding Claw resolves in two phases: stance/self-buff state on cast, then damage payload resolution on the next two empowered basic-attack hits."
       ]
     },
     "basic_ability_2": {
@@ -345,12 +352,19 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 2,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The empowered attacks apply spell effects to the target."
+        "Source notes (summary): The empowered attacks apply spell effects to the target.",
+        "Manual review (2026-02-25): Iron Mantle is two-phase: cast applies defensive self-state immediately (shield/heal-over-time Awaken branch), while life-steal/heal payload resolves on the next two empowered basic-attack hits."
       ]
     },
     "basic_ability_3": {
@@ -564,6 +578,18 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Udyr",
       "accessed": "2026-02-24",
       "used_for": "manual behavior-fidelity verification for ability timing, cadence, and player-visible execution semantics"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Wilding_Claw",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Wilding Claw stance activation timing, empowered-hit cadence, and attack-coupled payload resolution"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Iron_Mantle",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Iron Mantle cast-state shielding and empowered-hit healing cadence semantics"
     }
   ],
   "notes": [

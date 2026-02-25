@@ -39,6 +39,9 @@
       "unit": "radius_units",
       "duration_seconds": null,
       "cooldown_seconds": 90.0,
+      "cast_windup_seconds": 0.0,
+      "cast_range": 5500.0,
+      "effect_hitbox_radius": 550.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "target_location",
@@ -136,6 +139,8 @@
       "unit": "boolean",
       "duration_seconds": null,
       "cooldown_seconds": 90.0,
+      "cast_windup_seconds": 0.0,
+      "cast_range": 5500.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
@@ -168,7 +173,8 @@
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Redemption is modeled as long-range support intervention: delayed area beam grants vision, heals allies by level scaling, and damages enemy champions by target max-health true damage while remaining castable when dead.",
-      "Wave 109 data-quality pass: Intervention active cooldown metadata is explicitly encoded as 90 seconds across delayed impact, heal, damage, and cast-rule branches."
+      "Wave 109 data-quality pass: Intervention active cooldown metadata is explicitly encoded as 90 seconds across delayed impact, heal, damage, and cast-rule branches.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution metadata (`cast_range`, `effect_hitbox_radius`, `cast_windup_seconds`) for Intervention cast and delayed-beam branches."
     ]
   },
   "sources": [

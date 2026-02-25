@@ -117,6 +117,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Added a direct fixed-loadout evaluation mode for controlled champion A/B comparisons without search (`controlled_champion_fixed_loadout`).
 - Added a fixed-loadout keystone comparison mode (`controlled_champion_fixed_loadout_rune_sweep`) for direct one-build rune sweeps.
 - Reports and traces now include rune proc telemetry with trigger-source attribution and calibration metrics (opportunity counts, proc-opportunity rates, and damage/healing share).
+- Controlled-champion and fixed-loadout trace/report outputs now also include deterministic replay signatures (final-state checksum, tick-state checksum, queue checksum, tick/event counters).
 - Optional `simulation.combat_seed` enables deterministic combat-variation runs (enemy init order + initial attack jitter); fixed-loadout rune sweep repeats now use distinct combat seeds per repeat.
 - Scenarios are strict/minimal and reference canonical data from:
   - `Characters/`

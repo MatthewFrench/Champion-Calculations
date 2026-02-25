@@ -175,13 +175,21 @@
       },
       "execution": {
         "cast_windup_seconds": 0.33,
-        "projectile_speed": 2800.0
+        "projectile_speed": 2800.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 2.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": false,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Direction.",
         "Source castTime: 0.33.",
         "Source speed: 2800.",
-        "Source notes (summary): If both Stretching Strikes affect the same target, the target will be dealt the damage and applied the slow for both hits."
+        "Source notes (summary): If both Stretching Strikes affect the same target, the target will be dealt the damage and applied the slow for both hits.",
+        "Manual review (2026-02-25): Stretching Strikes is two-phase: first cast resolves projectile-hit damage and tether state, then second-hit crowd-control/displacement branches resolve on the empowered basic-attack strike within the tether window."
       ],
       "description_source": "Active: Zac stretches his left arm in the target direction that catches the first enemy hit, dealing magic damage, slowing them by 40% for 0.5 seconds, and forming a tether between Zac and the target for 2 seconds, during which they are revealed."
     },
@@ -393,6 +401,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Zac",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Zac/Stretching_Strikes",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Stretching Strikes first-hit tether timing, empowered second-hit gating, and displacement-resolution branching"
     }
   ],
   "notes": [

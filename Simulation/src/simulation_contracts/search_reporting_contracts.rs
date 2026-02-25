@@ -1,5 +1,5 @@
 use crate::data::EnemyUrfPreset;
-use crate::engine::EnemyDerivedCombatStats;
+use crate::engine::{EnemyDerivedCombatStats, SimulationDeterminismSignature};
 use crate::scripts::champions::ChampionRuneProcTelemetryEntry;
 use crate::simulation_contracts::{
     ChampionBase, EnemyConfig, Item, SimulationConfig, Stats, UrfBuffs,
@@ -264,6 +264,7 @@ pub(crate) struct ControlledChampionReportData<'a> {
     pub(crate) best_score: f64,
     pub(crate) best_outcome: &'a CombatOutcome,
     pub(crate) best_rune_proc_telemetry: &'a [ChampionRuneProcTelemetryEntry],
+    pub(crate) best_trace_determinism: SimulationDeterminismSignature,
     pub(crate) best_score_breakdown: ObjectiveScoreBreakdown,
     pub(crate) enemy_builds: &'a [EnemyBuildEntry],
     pub(crate) enemy_derived_combat_stats: &'a [EnemyDerivedCombatStats],

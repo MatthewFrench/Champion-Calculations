@@ -280,7 +280,8 @@ Priority C. Champion inventory and planning hygiene:
 25. Champion attack-cadence semantic-key rollout:
 - For non-trivial cast-vs-hit abilities, encode source-verified execution semantics directly in `execution` using stable keys (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`) so downstream runtime logic can consume deterministic behavior metadata.
 - Use only canonical enum-like values for `execution.resolution_timing` from `Simulation/data/execution_semantics_vocabulary.json`; if a new timing class is needed, update the vocabulary file in the same change.
-- Current semantic-key baseline is `18/682` active abilities with explicit `resolution_timing`; keep expanding this queue on high-impact empowered-hit abilities.
+- Current semantic-key baseline is `42/682` active abilities with explicit `resolution_timing`; keep expanding this queue on high-impact empowered-hit abilities.
+- For duration-limited variable-hit empowered states where no fixed attack-count cap is source-published, temporary `max_empowered_attacks = 0` sentinel usage is acceptable only when documented in ability `context_notes` and tracked in `Simulation/COVERAGE_GAPS.md` for explicit-schema follow-up.
 26. Item active cooldown metadata completeness:
 - When active cooldown values are source-published, encode `cooldown_seconds` consistently across every structured branch tied to that active (damage, movement, cast-rule, and follow-up effects).
 - Track intentional no-fixed-cooldown `on_activate` effects separately (charge/consume/single-use/round-limited) so they are not conflated with missing cooldown defects.
@@ -288,7 +289,7 @@ Priority C. Champion inventory and planning hygiene:
 27. Rune narrative decimal-format hygiene:
 - Keep rune narrative fields (`wiki_descriptions`, touched `long_desc`) free of generated decimal-spacing artifacts (`x. y`), and preserve flat/split parity after normalization.
 
-### Progress Snapshot (2026-02-24)
+### Progress Snapshot (2026-02-25)
 - Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
   - Completed champion execution-semantics wave 107 (`Olaf` `Reckless Swing`):
@@ -337,6 +338,19 @@ Priority C. Champion inventory and planning hygiene:
   - Completed item activation-cadence schema wave 120 (item pass):
     - added reusable `activation_cadence` objects to all currently tracked `on_activate` entries without fixed cooldown (`11` effects across `10` files) using canonical models (`charge_consumption`, `consumable_single_use`, `single_use_transform`, `round_limited_uses`)
     - documented this schema as canonical in coverage standards/checklist and centralized enum vocabulary file
+  - Completed champion execution-semantics waves 121-124 (`Darius` `Crippling Strike`, `Shyvana` `Twin Bite`, `RekSai` `Queen's Wrath`, `Chogath` `Vorpal Spikes`, `Skarner` `Shattered Earth`, `Illaoi` `Harsh Lesson`, `Draven` `Spinning Axe`, `Gwen` `Skip 'n Slash`):
+    - encoded explicit attack-cadence semantic keys for cast-prime plus empowered-hit timing, including two-phase cast-state branches where source-verified
+    - added page-level template provenance and tracker wave scope (`manual_behavior_verification_wave_121` through `manual_behavior_verification_wave_124`)
+  - Completed champion execution-semantics waves 125-128 (`Fizz` `Seastone Trident`, `Malphite` `Thunderclap`, `Shen` `Twilight Assault`, `Gragas` `Drunken Rage`, `Hecarim` `Devastating Charge`, `Kassadin` `Nether Blade`, `Kayle` `Starfire Spellblade`, `Viktor` `Siphon Power`):
+    - expanded canonical `resolution_timing` and companion attack-cadence semantic-key coverage to `34/682` active abilities
+    - added page-level template provenance and tracker wave scope (`manual_behavior_verification_wave_125` through `manual_behavior_verification_wave_128`)
+  - Completed champion execution-semantics waves 130-133 (`Sett` `Knuckle Down`, `Volibear` `Thundering Smash`, `TwistedFate` `Pick a Card`, `Shaco` `Deceive`, `Zac` `Stretching Strikes`, `Udyr` `Wilding Claw`, `Udyr` `Iron Mantle`, `Sivir` `Ricochet`):
+    - expanded canonical `resolution_timing` and companion attack-cadence semantic-key coverage to `42/682` active abilities
+    - added page-level ability-template provenance and tracker wave scope (`manual_behavior_verification_wave_130` through `manual_behavior_verification_wave_133`)
+    - documented temporary duration-limited variable-hit sentinel usage (`max_empowered_attacks = 0`) on `Sivir` `Ricochet` with deferred explicit-schema/runtime follow-up
+  - Completed item active execution-field completeness wave 129:
+    - backfilled explicit fixed-cooldown active execution fields (`cast_windup_seconds`, `cast_range`, and/or `effect_hitbox_radius`) to full fixed-cooldown branch coverage (`22/22` `on_activate` effects)
+    - preserved no-fixed-cooldown cadence-schema coverage at `11/11` effects across `10` files with canonical `activation_cadence` models
   - Completed champion execution-semantics wave 103 (`Nasus` `Spirit Fire`):
     - manually re-verified delayed first-impact timing, periodic zone-tick cadence, and armor-reduction linger semantics
     - expanded context-note execution semantics and schema notes with page-level template provenance

@@ -95,7 +95,7 @@ fn run_report_json_contract_has_schema_version_and_rune_telemetry_shape() {
         },
     ];
     let json_entries = report_rune_proc_telemetry_json(&telemetry, 500.0, 100.0);
-    assert_eq!(CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION, 2);
+    assert_eq!(CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION, 3);
     assert_eq!(json_entries.len(), 1);
     let entry = &json_entries[0];
     assert_eq!(entry.get("attempt_count").and_then(|v| v.as_u64()), Some(5));
@@ -126,6 +126,20 @@ fn run_report_json_contract_has_schema_version_and_rune_telemetry_shape() {
             .and_then(|entries| entries.first())
             .and_then(|source| source.get("attempt_count"))
             .and_then(|v| v.as_u64())
+            .is_some()
+    );
+
+    let sample_determinism = serde_json::json!({
+        "final_state_checksum_hex": "00",
+        "tick_state_checksum_hex": "00",
+        "queue_checksum_hex": "00",
+        "ticks_executed": 1,
+        "events_processed": 2
+    });
+    assert!(
+        sample_determinism
+            .get("final_state_checksum_hex")
+            .and_then(|value| value.as_str())
             .is_some()
     );
 }

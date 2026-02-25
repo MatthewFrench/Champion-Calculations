@@ -33,6 +33,7 @@
       "unit": null,
       "duration_seconds": 5.0,
       "cooldown_seconds": 15.0,
+      "cast_windup_seconds": 0.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
@@ -112,7 +113,8 @@
     "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
       "Tier-1 dataset alignment review: updated stats and total price to Data Dragon 16.3.1 / CommunityDragon baseline (55 AD, 21 lethality, 2500 total).",
-      "Execution model review: Soul Anchor marks current location, returns after 5 seconds unless recast early, and cooldown starts after the return event."
+      "Execution model review: Soul Anchor marks current location, returns after 5 seconds unless recast early, and cooldown starts after the return event.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution timing metadata (`cast_windup_seconds`) for Soul Anchor activation semantics."
     ]
   },
   "sources": [

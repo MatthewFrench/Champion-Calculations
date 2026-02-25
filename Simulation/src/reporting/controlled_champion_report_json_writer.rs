@@ -53,6 +53,18 @@ pub(crate) fn write_controlled_champion_report_json(
     report_path: &Path,
     data: &ControlledChampionReportData<'_>,
 ) -> Result<()> {
+    fn deterministic_signature_json(
+        signature: crate::engine::SimulationDeterminismSignature,
+    ) -> Value {
+        json!({
+            "final_state_checksum_hex": format!("{:016x}", signature.final_state_checksum),
+            "tick_state_checksum_hex": format!("{:016x}", signature.tick_state_checksum),
+            "queue_checksum_hex": format!("{:016x}", signature.queue_checksum),
+            "ticks_executed": signature.ticks_executed,
+            "events_processed": signature.events_processed
+        })
+    }
+
     fn component_json(
         weight: f64,
         normalized_ratio: f64,
@@ -123,6 +135,7 @@ pub(crate) fn write_controlled_champion_report_json(
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
     let best_rune_proc_telemetry = data.best_rune_proc_telemetry;
+    let best_trace_determinism = data.best_trace_determinism;
     let best_score_breakdown = data.best_score_breakdown;
     let controlled_champion_unmodeled_item_effect_names =
         unmodeled_runtime_item_effect_names(best_build);
@@ -169,6 +182,7 @@ pub(crate) fn write_controlled_champion_report_json(
             best_outcome.damage_dealt,
             best_outcome.healing_done,
         ),
+        "best_trace_determinism": deterministic_signature_json(best_trace_determinism),
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "controlled_champion_loadout_labels": controlled_champion_loadout.selection_labels,
         "controlled_champion_unmodeled_runes": controlled_champion_loadout.unmodeled_rune_names,

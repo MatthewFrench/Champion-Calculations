@@ -80,6 +80,7 @@
       "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": 10,
+      "effect_hitbox_radius": 450.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemy_units_in_offset_radius",
@@ -137,7 +138,8 @@
     "context_notes": [
       "Cleave damage differs for melee vs ranged (40% vs 20% AD).",
       "Execution-semantics review: Crescent is not instant; cast time follows the user's attack windup and cooldown starts after cast completion.",
-      "Cleave applies splash damage to nearby secondary enemies and does not trigger on structure hits; Crescent resolves as an auto-targeted area cast offset in front of the user."
+      "Cleave applies splash damage to nearby secondary enemies and does not trigger on structure hits; Crescent resolves as an auto-targeted area cast offset in front of the user.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution metadata (`effect_hitbox_radius`) for Crescent area-hit geometry."
     ]
   },
   "sources": [

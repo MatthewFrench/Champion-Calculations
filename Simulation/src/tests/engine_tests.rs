@@ -1589,6 +1589,88 @@ fn combat_seed_changes_enemy_attack_jitter_deterministically() {
 }
 
 #[test]
+fn deterministic_replay_signature_is_stable_for_same_seed_and_inputs() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let urf = test_urf();
+    let mut sim = test_simulation(4.0, false);
+    sim.combat_seed = Some(1337);
+
+    let mut runner_a = ControlledChampionCombatSimulation::new(
+        controlled_champion.clone(),
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim.clone(),
+        urf.clone(),
+    );
+    while runner_a.step(1) {}
+    let signature_a = runner_a.deterministic_replay_signature();
+
+    let mut runner_b = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim,
+        urf,
+    );
+    while runner_b.step(1) {}
+    let signature_b = runner_b.deterministic_replay_signature();
+
+    assert_eq!(signature_a, signature_b);
+    assert!(signature_a.ticks_executed > 0);
+    assert!(signature_a.events_processed > 0);
+}
+
+#[test]
+fn deterministic_replay_signature_changes_when_combat_seed_changes() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let urf = test_urf();
+
+    let mut sim_a = test_simulation(4.0, false);
+    sim_a.combat_seed = Some(7);
+    let mut runner_a = ControlledChampionCombatSimulation::new(
+        controlled_champion.clone(),
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim_a,
+        urf.clone(),
+    );
+    while runner_a.step(1) {}
+    let signature_a = runner_a.deterministic_replay_signature();
+
+    let mut sim_b = test_simulation(4.0, false);
+    sim_b.combat_seed = Some(11);
+    let mut runner_b = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim_b,
+        urf,
+    );
+    while runner_b.step(1) {}
+    let signature_b = runner_b.deterministic_replay_signature();
+
+    assert!(
+        signature_a.tick_state_checksum != signature_b.tick_state_checksum
+            || signature_a.final_state_checksum != signature_b.final_state_checksum
+            || signature_a.queue_checksum != signature_b.queue_checksum
+    );
+}
+
+#[test]
 fn enemy_attack_sequence_owner_methods_advance_and_invalidate_old_tokens() {
     let controlled_champion = test_controlled_champion_base();
     let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];

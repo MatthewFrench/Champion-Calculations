@@ -39,6 +39,8 @@
       "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": 60.0,
+      "cast_windup_seconds": 0.0,
+      "cast_range": 700.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemy_champion",
@@ -98,7 +100,8 @@
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Lightning Bolt is a targeted active against enemy champions and resolves both damage and slow on activation.",
-      "Player-visible behavior: active cast range is 700, cooldown is 60 seconds, and the slow branch is 25% for 1.5 seconds."
+      "Player-visible behavior: active cast range is 700, cooldown is 60 seconds, and the slow branch is 25% for 1.5 seconds.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution metadata (`cast_range`, `cast_windup_seconds`) for targeted Lightning Bolt activation semantics."
     ]
   },
   "sources": [

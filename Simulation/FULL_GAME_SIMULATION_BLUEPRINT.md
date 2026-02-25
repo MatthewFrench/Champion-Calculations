@@ -49,6 +49,7 @@ Implemented baseline highlights:
 - shared runtime stat/rune/item effect channels (`Simulation/src/scripts/runtime/*`)
 - search/orchestration/reporting pipeline for optimization (`Simulation/src/search.rs`, `Simulation/src/scenario_runner.rs`, `Simulation/src/reporting.rs`)
 - controller harness runtime ingress with parity-focused perspective/action/status contracts and fixed-delay deterministic request execution (`Simulation/src/champion_control_harness/*`, `Simulation/src/engine/controlled_champion_controller_channels.rs`)
+- deterministic replay signatures now emitted in controlled-champion and fixed-loadout trace/report artifacts (final-state checksum, tick-state checksum, queue checksum, tick/event counters)
 
 Current non-data scope limitations:
 - scenario modes are combat-centric, not full match simulation (`Simulation/src/scenario_runner/*`)
@@ -75,7 +76,7 @@ Current anchors:
 Needed code additions:
 - typed timeline channels for macro systems (objectives/spawns/structure states)
 - deterministic tie-break identifiers for all new event families
-- replay checksum support per tick window
+- replay checksum support per tick window is now emitted in trace/report artifacts; cross-run hard-fail replay gates are still pending
 
 ### 2) World/Map Layer
 Required:
@@ -316,15 +317,15 @@ Status labels:
 - `BLOCKED`
 
 ## Current Status Snapshot (2026-02-25)
-Overall weighted completion estimate for this blueprint: `60%` (`IN_PROGRESS`).
+Overall weighted completion estimate for this blueprint: `61%` (`IN_PROGRESS`).
 
 Bucket status (complete / remaining):
 - Runtime Systems Completeness (`30%` weight): `61% / 39%`
   - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation, baseline non-champion world ecology anchors, runtime minion-wave spawn/despawn lifecycle channels, neutral-objective spawn/respawn lifecycle channels, world-owned enemy movement/respawn position channels, controller harness contracts, deterministic controller request ingress with fixed-delay execution, command-owned controlled champion movement stepping, partial actor-symmetric opponent move/stop/basic-attack channels, mapped script-cast `CastAbilityBySlot` command execution for supported enemy champions, and mapped opponent `UseItemActive` support for `stasis_item` and `emergency_shield_item` with runtime shield/heal ownership channels
   - largest remaining gap: world ownership still lacks terrain-aware pathfinding/collision and combat-coupled macro lifecycle transitions (objective damage, structure destruction, economy/xp ownership)
-- Determinism And Replay Guarantees (`20%` weight): `77% / 23%`
-  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, per-tick stable-sequence controller request execution, data-owned fixed tick delay for controller command application, deterministic actor-id keyed ingress routing, manual-control suppression of autonomous enemy script cadence, and deterministic stasis movement-lock/nullification handling in enemy command channels
-  - largest remaining gap: no replay checksum verifier and no full-match deterministic replay contract
+- Determinism And Replay Guarantees (`20%` weight): `80% / 20%`
+  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, per-tick stable-sequence controller request execution, data-owned fixed tick delay for controller command application, deterministic actor-id keyed ingress routing, manual-control suppression of autonomous enemy script cadence, deterministic stasis movement-lock/nullification handling in enemy command channels, and replay-signature checksum emission (final-state, tick-state, queue checksums with tick/event counters) in trace/report artifacts
+  - largest remaining gap: replay checksum data is diagnostics-only today (no hard-fail replay verifier gate), and no full-match deterministic replay contract exists yet
 - Calibration And Correctness (`20%` weight): `67% / 33%`
   - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, world/script registration guardrails, explicit required-defaults regression coverage, startup preflight idempotence validation, world clamping/ecology scaffold regression coverage, runtime/world lifecycle regressions for minion/objective transitions, controller-harness legality/parity regression coverage, deterministic ingress/movement command regressions, fixed-delay/manual-mode harness regressions, actor-id ingress regressions (`RejectedControlledActorNotFound`), enemy manual script-cast channel regressions (autonomous script suppression, mapped cast acceptance, cooldown rejection), and enemy item-active command regressions (`stasis_item` + `emergency_shield_item` availability/activation/cooldown legality and shield-heal correctness)
   - largest remaining gap: no golden interaction harness/property-suite for full-system invariants

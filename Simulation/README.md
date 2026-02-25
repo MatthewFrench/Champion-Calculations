@@ -73,6 +73,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - When unmodeled hard gates are enabled, controlled-champion candidate generation space is constrained up front (modeled-rune loadout domain and modeled-runtime-item pool) so invalid candidates are not generated and then rejected later.
 - Optional `simulation.combat_seed` applies deterministic combat variation (enemy initialization order + initial attack jitter) for robust repeated evaluation without nondeterminism.
 - Full rune-proc telemetry collection is disabled for search-time scoring simulations and enabled explicitly for trace/report replay simulations.
+- Controlled-champion and fixed-loadout trace/report artifacts now emit deterministic replay signatures (final-state checksum, tick-state checksum, queue checksum, and tick/event counters) for replay-audit workflows.
 - Rune telemetry runtime bookkeeping uses fixed-index counter arrays (no per-event hashmap lookup/allocation in hot paths).
 - Rune-proc telemetry trigger/source accounting and telemetry-entry assembly now route through `src/scripts/runtime/loadout_runtime/rune_proc_telemetry.rs`.
 - Runtime on-hit and ability bonus-damage resolution now routes through `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` facade plus explicit owner leaves under `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/`.

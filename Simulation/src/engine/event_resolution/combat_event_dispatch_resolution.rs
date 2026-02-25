@@ -90,6 +90,7 @@ impl ControlledChampionCombatSimulation {
                 self.apply_hot_effects(top.time);
                 self.apply_enemy_respawn_updates();
                 self.process_event(&top);
+                self.record_processed_event_for_determinism();
                 let should_recur = match &top.kind {
                     EventType::ChampionScript(idx, _, epoch) => {
                         self.enemy_script_event_should_recur(*idx, *epoch)
@@ -118,6 +119,7 @@ impl ControlledChampionCombatSimulation {
             if self.health <= 0.0 && !self.finished {
                 self.apply_revive_or_mark_controlled_champion_death();
             }
+            self.record_tick_state_for_determinism();
             if self.finished {
                 return false;
             }

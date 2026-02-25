@@ -138,12 +138,20 @@
         5.0
       ],
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 5.0,
+        "max_empowered_attacks": 2,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The bonus movement speed buff is named Looking For a Fight."
+        "Source notes (summary): The bonus movement speed buff is named Looking For a Fight.",
+        "Manual review (2026-02-25): Knuckle Down is cast-gated and attack-cadence-coupled; cast grants immediate self-buff state while bonus damage resolves only on the next two empowered basic-attack hits."
       ]
     },
     "basic_ability_2": {
@@ -313,6 +321,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Sett",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Sett/Knuckle_Down",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Knuckle Down cast-gating, attack-reset behavior, and empowered-hit resolution timing"
     }
   ],
   "notes": [

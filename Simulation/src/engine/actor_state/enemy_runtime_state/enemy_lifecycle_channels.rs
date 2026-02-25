@@ -23,6 +23,9 @@ impl ControlledChampionCombatSimulation {
                 state.untargetable_until = 0.0;
                 state.stasis_until = 0.0;
                 state.invulnerable_until = 0.0;
+                state.emergency_shield_amount = 0.0;
+                state.emergency_heal_rate = 0.0;
+                state.emergency_heal_until = 0.0;
                 respawned.push((idx, state.enemy.name.clone(), state.script_epoch));
             }
         }
@@ -124,7 +127,11 @@ impl ControlledChampionCombatSimulation {
             if state.respawn_at.is_some() || state.health <= 0.0 {
                 continue;
             }
-            let heal = tick_regen_heal(&state.runtime, state.health, state.max_health, delta);
+            let mut heal = tick_regen_heal(&state.runtime, state.health, state.max_health, delta);
+            if state.emergency_heal_until > self.time {
+                let active = delta.min(state.emergency_heal_until - self.time);
+                heal += (state.emergency_heal_rate * active).max(0.0);
+            }
             state.health = (state.health + heal).min(state.max_health);
         }
     }

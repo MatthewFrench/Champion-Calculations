@@ -15,7 +15,8 @@ use crate::data::{
 };
 use crate::defaults::protoplasm_lifeline_defaults;
 use crate::engine::{
-    ControlledChampionCombatSimulation, EnemyDerivedCombatStats, derive_enemy_combat_stats,
+    ControlledChampionCombatSimulation, EnemyDerivedCombatStats, SimulationDeterminismSignature,
+    derive_enemy_combat_stats,
 };
 use crate::reporting::{
     write_controlled_champion_report_json, write_controlled_champion_report_markdown,
@@ -95,10 +96,10 @@ struct ControlledChampionScenarioConfig {
     stack_overrides: HashMap<String, f64>,
 }
 
-const FIXED_LOADOUT_TRACE_JSON_SCHEMA_VERSION: u32 = 3;
-const FIXED_LOADOUT_REPORT_JSON_SCHEMA_VERSION: u32 = 2;
+const FIXED_LOADOUT_TRACE_JSON_SCHEMA_VERSION: u32 = 4;
+const FIXED_LOADOUT_REPORT_JSON_SCHEMA_VERSION: u32 = 3;
 const FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION: u32 = 2;
-const CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION: u32 = 2;
+const CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION: u32 = 3;
 const FIXED_SWEEP_REPEAT_SEED_STRIDE: u64 = 0x9E37_79B9_7F4A_7C15;
 
 // Controlled-champion modes should fail fast when script coverage is missing so runs do not

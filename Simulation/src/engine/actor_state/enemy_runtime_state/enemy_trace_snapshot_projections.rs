@@ -144,6 +144,18 @@ impl ControlledChampionCombatSimulation {
                 (state.invulnerable_until - now).max(0.0)
             ));
         }
+        if now < state.emergency_heal_until {
+            lines.push(format!(
+                "Emergency heal-over-time {:.2}s",
+                (state.emergency_heal_until - now).max(0.0)
+            ));
+        }
+        if state.emergency_shield_amount > 0.0 {
+            lines.push(format!(
+                "Emergency shield {:.1}",
+                state.emergency_shield_amount
+            ));
+        }
         if lines.is_empty() {
             lines.push("none".to_string());
         }

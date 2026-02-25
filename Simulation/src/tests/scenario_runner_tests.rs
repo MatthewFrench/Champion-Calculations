@@ -181,13 +181,54 @@ fn assert_rune_telemetry_json_shape(entry: &Value) {
     assert!(first_source.get("proc_eligible_rate").is_some());
 }
 
+fn assert_determinism_json_shape(entry: &Value) {
+    assert!(
+        entry
+            .get("final_state_checksum_hex")
+            .and_then(Value::as_str)
+            .is_some()
+    );
+    assert!(
+        entry
+            .get("tick_state_checksum_hex")
+            .and_then(Value::as_str)
+            .is_some()
+    );
+    assert!(
+        entry
+            .get("queue_checksum_hex")
+            .and_then(Value::as_str)
+            .is_some()
+    );
+    assert!(
+        entry
+            .get("ticks_executed")
+            .and_then(Value::as_u64)
+            .is_some()
+    );
+    assert!(
+        entry
+            .get("events_processed")
+            .and_then(Value::as_u64)
+            .is_some()
+    );
+}
+
 #[test]
 fn fixed_loadout_report_json_contract_schema_and_telemetry_shape() {
-    assert_eq!(FIXED_LOADOUT_REPORT_JSON_SCHEMA_VERSION, 2);
+    assert_eq!(FIXED_LOADOUT_REPORT_JSON_SCHEMA_VERSION, 3);
     let entry = sample_rune_proc_telemetry_entry();
     let telemetry_json = rune_proc_telemetry_json(&[entry], 900.0, 100.0);
     assert_eq!(telemetry_json.len(), 1);
     assert_rune_telemetry_json_shape(&telemetry_json[0]);
+    let sample_determinism = json!({
+        "final_state_checksum_hex": "00",
+        "tick_state_checksum_hex": "00",
+        "queue_checksum_hex": "00",
+        "ticks_executed": 1,
+        "events_processed": 2
+    });
+    assert_determinism_json_shape(&sample_determinism);
 }
 
 #[test]
@@ -201,12 +242,20 @@ fn fixed_loadout_rune_sweep_json_contract_schema_and_telemetry_shape() {
 
 #[test]
 fn trace_json_contract_schema_and_telemetry_shape() {
-    assert_eq!(FIXED_LOADOUT_TRACE_JSON_SCHEMA_VERSION, 3);
-    assert_eq!(CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION, 2);
+    assert_eq!(FIXED_LOADOUT_TRACE_JSON_SCHEMA_VERSION, 4);
+    assert_eq!(CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION, 3);
     let entry = sample_rune_proc_telemetry_entry();
     let telemetry_json = rune_proc_telemetry_json(&[entry], 1000.0, 250.0);
     assert_eq!(telemetry_json.len(), 1);
     assert_rune_telemetry_json_shape(&telemetry_json[0]);
+    let sample_determinism = json!({
+        "final_state_checksum_hex": "00",
+        "tick_state_checksum_hex": "00",
+        "queue_checksum_hex": "00",
+        "ticks_executed": 1,
+        "events_processed": 2
+    });
+    assert_determinism_json_shape(&sample_determinism);
 }
 
 #[test]

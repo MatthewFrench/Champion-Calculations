@@ -1,6 +1,68 @@
 # Improvement Tracker
 
 ## Done
+- Landed deterministic replay signature channels and artifact wiring:
+  - added deterministic replay signature ownership on combat runtime:
+    - final-state checksum
+    - per-tick rolled checksum
+    - event-queue checksum
+    - executed tick/event counters
+  - exposed signature projections through:
+    - controlled champion trace JSON (`determinism`)
+    - fixed-loadout trace JSON (`determinism`)
+    - fixed-loadout report JSON (`determinism`)
+    - controlled-champion run report JSON (`best_trace_determinism`)
+  - bumped schema contracts:
+    - `CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION`: `2 -> 3`
+    - `FIXED_LOADOUT_REPORT_JSON_SCHEMA_VERSION`: `2 -> 3`
+    - `FIXED_LOADOUT_TRACE_JSON_SCHEMA_VERSION`: `3 -> 4`
+    - `CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION`: `2 -> 3`
+  - added deterministic replay regressions in `src/tests/engine_tests.rs` for:
+    - stable signatures under identical seed/inputs
+    - signature deltas under seed variation
+  - updated schema contract tests in:
+    - `src/tests/scenario_runner_tests.rs`
+    - `src/tests/reporting_tests.rs`
+- Completed data-first champion/item execution-semantics expansion waves 121-133:
+  - champion execution-semantics waves `121-128`:
+    - added explicit `execution.resolution_timing` + companion attack-cadence semantic keys for `16` additional active abilities (`Darius`, `Shyvana`, `RekSai`, `Chogath`, `Skarner`, `Illaoi`, `Draven`, `Gwen`, `Fizz`, `Malphite`, `Shen`, `Gragas`, `Hecarim`, `Kassadin`, `Kayle`, `Viktor`)
+    - expanded semantic-key baseline from `18/682` to `34/682` active abilities with explicit `resolution_timing`
+    - recorded page-level manual verification scope in `Simulation/champion_behavior_verification_tracker.json` waves `121-128`
+  - champion execution-semantics waves `130-133`:
+    - added explicit `execution.resolution_timing` + companion attack-cadence semantic keys for `8` additional active abilities (`Sett`, `Volibear`, `TwistedFate`, `Shaco`, `Zac`, `Udyr` x2, `Sivir`)
+    - expanded semantic-key baseline from `34/682` to `42/682` active abilities with explicit `resolution_timing`
+    - recorded page-level manual verification scope in `Simulation/champion_behavior_verification_tracker.json` waves `130-133`
+    - documented temporary duration-limited variable-hit sentinel usage (`max_empowered_attacks = 0`) on `Sivir` `Ricochet` plus deferred explicit-schema/runtime follow-up tracking
+  - item active execution-field completeness wave `129`:
+    - backfilled explicit fixed-cooldown `on_activate` execution fields (`cast_windup_seconds`, `cast_range`, and/or `effect_hitbox_radius`) to full fixed-cooldown branch coverage (`22/22`)
+    - preserved no-fixed-cooldown cadence-schema coverage at `11/11` effects across `10` files
+  - documentation alignment sweep:
+    - updated `Simulation/COVERAGE_STANDARDS.md`, `Simulation/COVERAGE_CHECKLIST.md`, `Simulation/CONFIDENCE_REVIEW.md`, `Simulation/DATA_AUTHORING_GUIDE.md`, and `Simulation/COVERAGE_GAPS.md` to reflect new baselines and wave tracking
+    - kept deferred runtime follow-up explicitly documented for data semantics now present but not yet consumed by runtime loaders/scripts
+- Landed mapped opponent `emergency_shield_item` item-active ingress and runtime shield/heal ownership:
+  - expanded opponent manual-control `UseItemActive` support for `emergency_shield_item` in:
+    - `src/engine/controlled_champion_controller_channels.rs`
+    - accepted commands now execute deterministic enemy emergency-shield activation through queued actor-id ingress.
+  - moved enemy defensive-item capability detection behind script-owned item-hook channels in:
+    - `src/scripts/items/hooks.rs`
+    - added runtime item-name capability projection helper and reused it from engine enemy initialization.
+  - extended enemy item-active ownership channels in:
+    - `src/engine/actor_state/enemy_runtime_state/enemy_item_active_channels.rs`
+    - availability/readiness/activation now include `emergency_shield_item` alongside `stasis_item`.
+  - integrated enemy emergency-shield runtime correctness:
+    - enemy incoming-damage channel now applies emergency-shield absorb ownership (`src/engine/event_resolution/incoming_damage_resolution.rs`)
+    - enemy regeneration ownership now applies emergency heal-over-time (`src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`)
+    - enemy trace status projection now includes emergency shield/heal windows (`src/engine/actor_state/enemy_runtime_state/enemy_trace_snapshot_projections.rs`)
+  - added regression coverage:
+    - `enemy_actor_item_active_emergency_shield_request_rejects_when_enemy_has_no_item`
+    - `enemy_actor_item_active_emergency_shield_request_accepts_and_absorbs_damage`
+    - `enemy_actor_item_active_emergency_shield_request_reports_cooldown_after_activation`
+    - `enemy_actor_emergency_shield_item_applies_heal_over_time`
+    (`src/tests/engine_tests.rs`)
+  - added item-hook regression coverage:
+    - `defensive_item_capabilities_detect_supported_runtime_item_names`
+    (`src/scripts/items/tests/hooks_tests.rs`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Landed mapped opponent `stasis_item` item-active ingress and stasis lock correctness:
   - extended opponent `UseItemActive` support for `stasis_item` in:
     - `src/engine/controlled_champion_controller_channels.rs`

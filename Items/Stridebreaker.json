@@ -83,6 +83,7 @@
       "unit": "ratio",
       "duration_seconds": 3.0,
       "cooldown_seconds": 15.0,
+      "effect_hitbox_radius": 450.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemies_in_radius",
@@ -150,6 +151,7 @@
       "unit": "boolean",
       "duration_seconds": null,
       "cooldown_seconds": 15.0,
+      "effect_hitbox_radius": 450.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
@@ -190,7 +192,8 @@
       "Cleave damage differs for melee vs ranged (40% vs 20% AD).",
       "Stridebreaker is a fighter gap-closing and sticking tool: short-range area burst, slow, and temporary speed burst to continue melee pressure.",
       "Movement-during-cast behavior is scoped to Breaking Shockwave activation for close-range engage and chase continuity.",
-      "Wave 109 data-quality pass: Breaking Shockwave active cooldown metadata is explicitly encoded as 15 seconds across all active branch effects."
+      "Wave 109 data-quality pass: Breaking Shockwave active cooldown metadata is explicitly encoded as 15 seconds across all active branch effects.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution metadata (`effect_hitbox_radius`) for Breaking Shockwave area-hit geometry."
     ]
   },
   "sources": [
